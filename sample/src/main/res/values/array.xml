@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="types">
+        <item>ListView</item>
+        <item>GridView</item>
+        <item>RecyclerView</item>
+        <item>WebView</item>
+        <item>AppListFragment</item>
+        <item>AppExpandableListFragment</item>
+    </string-array>
+</resources>
