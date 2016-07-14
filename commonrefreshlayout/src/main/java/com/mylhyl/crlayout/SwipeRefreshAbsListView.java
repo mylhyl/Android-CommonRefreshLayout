@@ -35,7 +35,7 @@ public abstract class SwipeRefreshAbsListView<T extends AbsListView> extends Swi
      */
     public final void setAdapter(ListAdapter adapter) {
         if (adapter == null)
-            throw new NullPointerException("mAdapter is null please call CygSwipeRefreshLayout.setAdapter");
+            throw new NullPointerException("mAdapter is null please call SwipeRefreshAbsListView.setAdapter");
         getScrollView().setOnScrollListener(new OnScrollAbsListListener(this));
         getScrollView().setAdapter(adapter);
         registerDataSetObserver(adapter);

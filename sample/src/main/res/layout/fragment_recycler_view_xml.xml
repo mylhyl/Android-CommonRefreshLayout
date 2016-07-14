@@ -6,4 +6,4 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     crl:footer_layout="@layout/swipe_refresh_footer"
-    tools:context=".app.ListViewFragment" />
+    tools:context=".app.RecyclerViewFragment" />
