@@ -73,7 +73,7 @@
 
 ####使用Gradle构建时添加一下依赖即可:
 ```javascript
-compile 'com.mylhyl:commonrefreshlayout:1.0'
+compile 'com.mylhyl:commonrefreshlayout:1.1'
 ```
 #### 如果使用eclipse
 只能`clone`源码，然后在 eclipse 中用`library`方式引用
@@ -83,5 +83,7 @@ compile 'com.mylhyl:commonrefreshlayout:1.0'
 ### QQ交流群:435173211
 
 #### 更新日志
-> 1.1   初始版本
+> 1.0 初始版本
+
+> 1.1 修改为`recyclerview-v7:23.4.0`
 
