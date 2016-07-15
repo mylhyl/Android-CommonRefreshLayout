@@ -66,7 +66,7 @@ public class SwipeRefreshRecyclerView extends SwipeRefreshAdapterView<RecyclerVi
         }
     }
 
-    public class OnScrollRecyclerViewListener extends RecyclerView.OnScrollListener {
+    public static class OnScrollRecyclerViewListener extends RecyclerView.OnScrollListener {
         private ILoadSwipeRefresh mILoadSwipeRefresh;
         private RecyclerView.OnScrollListener mOnScrollListener;
 
@@ -82,6 +82,14 @@ public class SwipeRefreshRecyclerView extends SwipeRefreshAdapterView<RecyclerVi
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
             super.onScrollStateChanged(recyclerView, newState);
+            // 只有在闲置状态情况下检查
+            if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                // 如果满足允许上拉加载、非加载状态中、最后一个显示的 item 与数据源的大小一样，则表示滑动入底部
+                if (!isFirstItemVisible(recyclerView) && mILoadSwipeRefresh.isEnabledLoad()
+                        && !mILoadSwipeRefresh.isLoading() && isLastItemVisible(recyclerView)) {
+                    mILoadSwipeRefresh.loadData();// 执行上拉加载数据
+                }
+            }
             if (null != mOnScrollListener)
                 mOnScrollListener.onScrollStateChanged(recyclerView, newState);
         }
@@ -89,13 +97,6 @@ public class SwipeRefreshRecyclerView extends SwipeRefreshAdapterView<RecyclerVi
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
-
-            if (!isFirstItemVisible(recyclerView)
-                    && mILoadSwipeRefresh.isEnabledLoad() && !mILoadSwipeRefresh.isLoading()
-                    && isLastItemVisible(recyclerView)) {
-                mILoadSwipeRefresh.loadData();// 滑动底部自动执行上拉加载
-            }
-
             if (null != mOnScrollListener)
                 mOnScrollListener.onScrolled(recyclerView, dx, dy);
         }

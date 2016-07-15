@@ -57,6 +57,7 @@ public class ListViewFragment extends Fragment implements SwipeRefreshLayout.OnR
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         swipeRefreshListView = (SwipeRefreshListView) view.findViewById(R.id.swipeRefresh);
+        swipeRefreshListView.getSwipeRefreshLayout().setColorSchemeResources(R.color.colorPrimary);
     }
 
     @Override

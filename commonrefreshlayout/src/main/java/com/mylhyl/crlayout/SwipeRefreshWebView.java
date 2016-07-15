@@ -5,7 +5,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 /**
  * SwipeRefreshLayout 加 WebView 布局<br>
@@ -41,8 +40,8 @@ public class SwipeRefreshWebView extends BaseSwipeRefresh<WebView> {
     }
 
     public void showProgressView() {
-        getSwipeRefreshLayout().autoRefresh();
-        getSwipeRefreshLayout().setRefreshing(true);
+        autoRefresh();
+        setRefreshing(true);
     }
 
     @Override

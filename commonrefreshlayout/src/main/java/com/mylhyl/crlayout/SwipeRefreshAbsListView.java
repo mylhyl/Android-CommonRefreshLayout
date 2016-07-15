@@ -60,7 +60,8 @@ public abstract class SwipeRefreshAbsListView<T extends AbsListView> extends Swi
             mDataSetObserver = null;
         }
     }
-    public class OnScrollAbsListListener implements AbsListView.OnScrollListener {
+
+    public static class OnScrollAbsListListener implements AbsListView.OnScrollListener {
         private ILoadSwipeRefresh mILoadSwipeRefresh;
         private AbsListView.OnScrollListener mOnScrollListener;
 
@@ -75,22 +76,25 @@ public abstract class SwipeRefreshAbsListView<T extends AbsListView> extends Swi
 
         @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
+            // 只有在闲置状态情况下检查
+            if (scrollState == SCROLL_STATE_IDLE) {
+                // 如果满足允许上拉加载、非加载状态中、最后一个显示的 item 与数据源的大小一样，则表示滑动入底部
+                if (mILoadSwipeRefresh.isEnabledLoad() && !mILoadSwipeRefresh.isLoading()
+                        && view.getLastVisiblePosition() == (view.getCount() - 1)) {
+                    mILoadSwipeRefresh.loadData();// 执行上拉加载数据
+                }
+            }
             if (null != mOnScrollListener)
                 mOnScrollListener.onScrollStateChanged(view, scrollState);
         }
 
         @Override
         public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-            if (firstVisibleItem > 0
-                    && mILoadSwipeRefresh.isEnabledLoad() && !mILoadSwipeRefresh.isLoading()
-                    && view.getLastVisiblePosition() == (totalItemCount - 1)) {
-                mILoadSwipeRefresh.loadData();// 滑动底部自动执行上拉加载
-            }
-
             if (null != mOnScrollListener)
                 mOnScrollListener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
         }
     }
+
     private class EmptyDataSetObserver extends DataSetObserver {
         @Override
         public void onChanged() {
