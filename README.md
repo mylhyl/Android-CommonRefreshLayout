@@ -83,14 +83,14 @@ compile 'com.mylhyl:commonrefreshlayout:1.5'
 ### QQ交流群:435173211
 
 #### 更新日志
-> 1.0 初始版本
+> 1.5 优化`SwipeRefreshWebView`的`autoRefresh`方法
 
-> 1.1 修改为`recyclerview-v7:23.4.0`
+> 1.4 优化`SwipeRefreshWebView`显示下拉动画
+
+> 1.3 增加`autoRefresh(@ColorRes int... colorResIds)`方法，指定动画颜色
 
 > 1.2 修复滑动到底部会上拉加载多次
 
-> 1.3 增加autoRefresh(@ColorRes int... colorResIds)方法，指定动画颜色
+> 1.1 修改为`recyclerview-v7:23.4.0`
 
-> 1.4 优化SwipeRefreshWebView显示下拉动画
-
-> 1.5 优化SwipeRefreshWebView的autoRefresh方法
+> 1.0 初始版本
