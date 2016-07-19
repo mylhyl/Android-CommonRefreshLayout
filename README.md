@@ -73,7 +73,7 @@
 
 ####使用Gradle构建时添加一下依赖即可:
 ```javascript
-compile 'com.mylhyl:commonrefreshlayout:1.2'
+compile 'com.mylhyl:commonrefreshlayout:1.3'
 ```
 #### 如果使用eclipse
 只能`clone`源码，然后在 eclipse 中用`library`方式引用
@@ -87,4 +87,6 @@ compile 'com.mylhyl:commonrefreshlayout:1.2'
 
 > 1.1 修改为`recyclerview-v7:23.4.0`
 
-> 1.2 a.修复滑动到底部会上拉加载多次
+> 1.2 修复滑动到底部会上拉加载多次
+
+> 1.3 增加autoRefresh(@ColorRes int... colorResIds)方法，指定动画颜色

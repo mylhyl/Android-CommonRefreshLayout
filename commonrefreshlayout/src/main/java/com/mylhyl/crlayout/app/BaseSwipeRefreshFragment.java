@@ -1,6 +1,7 @@
 package com.mylhyl.crlayout.app;
 
 import android.os.Bundle;
+import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -40,6 +41,14 @@ abstract class BaseSwipeRefreshFragment<T extends BaseSwipeRefresh> extends Frag
         super.onViewCreated(view, savedInstanceState);
         // 注册下拉刷新
         mSwipeRefresh.setOnRefreshListener(this);
+    }
+
+    public final void autoRefresh() {
+        getSwipeRefreshLayout().autoRefresh();
+    }
+
+    public final void autoRefresh(@ColorRes int... colorResIds) {
+        getSwipeRefreshLayout().autoRefresh(colorResIds);
     }
 
     /**

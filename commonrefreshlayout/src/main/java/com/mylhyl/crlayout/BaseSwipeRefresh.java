@@ -3,6 +3,7 @@ package com.mylhyl.crlayout;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
+import android.support.annotation.ColorRes;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -103,8 +104,14 @@ public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout impl
     }
 
     @Override
-    public final void autoRefresh(boolean scale, int start, int end) {
-        mLoadSwipeRefresh.autoRefresh(scale, start, end);
+    public final void autoRefresh(@ColorRes int... colorResIds) {
+        mLoadSwipeRefresh.autoRefresh(colorResIds);
+        this.setRefreshing(true);
+    }
+
+    @Override
+    public final void autoRefresh(boolean scale, int start, int end, @ColorRes int... colorResIds) {
+        mLoadSwipeRefresh.autoRefresh(scale, start, end, colorResIds);
         this.setRefreshing(true);
     }
 

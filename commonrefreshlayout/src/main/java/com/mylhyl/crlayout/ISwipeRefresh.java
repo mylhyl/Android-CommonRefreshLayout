@@ -1,5 +1,6 @@
 package com.mylhyl.crlayout;
 
+import android.support.annotation.ColorRes;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 
@@ -7,9 +8,19 @@ import android.view.View;
  * Created by hupei on 2016/5/18.
  */
 public interface ISwipeRefresh<T> {
+    /**
+     * 显示刷新动画，颜色随系统
+     */
     void autoRefresh();
 
-    void autoRefresh(boolean scale, int start, int end);
+    /**
+     * 显示刷新动画，可指定颜色
+     *
+     * @param colorResIds 动画颜色
+     */
+    void autoRefresh(@ColorRes int... colorResIds);
+
+    void autoRefresh(boolean scale, int start, int end, @ColorRes int... colorResIds);
 
     void setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener listener);
 

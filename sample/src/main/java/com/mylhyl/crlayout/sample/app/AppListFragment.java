@@ -1,30 +1,40 @@
 package com.mylhyl.crlayout.sample.app;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.mylhyl.crlayout.IFooterLayout;
+import com.bumptech.glide.Glide;
+import com.litesuits.http.LiteHttp;
+import com.litesuits.http.listener.HttpListener;
+import com.litesuits.http.request.AbstractRequest;
+import com.litesuits.http.request.StringRequest;
+import com.litesuits.http.request.param.HttpMethods;
+import com.litesuits.http.response.Response;
 import com.mylhyl.crlayout.app.SwipeRefreshListFragment;
 import com.mylhyl.crlayout.sample.R;
+import com.mylhyl.cygadapter.CygAdapter;
+import com.mylhyl.cygadapter.CygViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by hupei on 2016/5/13.
  */
 public class AppListFragment extends SwipeRefreshListFragment {
-    private ArrayAdapter<String> adapter;
+    private static final String URL = "http://image.baidu.com/";
+    private static final String REGEX_IMG = "<img.*?src=\"http://(.*?).jpg\"";
+    private CygAdapter<String> adapter;
     private List<String> objects = new ArrayList<>();
-    private int index;
-    private int footerIndex = 20;
+    private LiteHttp liteHttp;
 
     public static AppListFragment newInstance() {
         return new AppListFragment();
@@ -34,20 +44,32 @@ public class AppListFragment extends SwipeRefreshListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
-        //注意在 setOnListLoadListener 或 setEnabledLoad 之前使用
-        getSwipeRefreshLayout().setFooterResource(R.layout.swipe_refresh_footer);
+
         setEnabledLoad(true);
 
-        IFooterLayout footerLayout = getSwipeRefreshLayout().getFooterLayout();
-        footerLayout.setFooterText("加载更多数据...");
-        footerLayout.setFooterTextSize(18);
-        footerLayout.setFooterTextColor(Color.GREEN);
 
-        getSwipeRefreshLayout().autoRefresh();
-
-        adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, objects);
+        adapter = new CygAdapter<String>(getContext(), R.layout.image_item, objects) {
+            @Override
+            public void onBindData(CygViewHolder viewHolder, String item, int position) {
+                ImageView imageView = viewHolder.findViewById(R.id.img_item);
+                Glide.with(mContext)
+                        .load(item.toString())
+                        .into(imageView);
+            }
+        };
         setListAdapter(adapter);
         setEmptyText("无数据");
+        if (liteHttp == null) {
+            liteHttp = LiteHttp.build(getContext())
+                    .setSocketTimeout(5000)
+                    .setConnectTimeout(5000)
+                    .create();
+        } else {
+            liteHttp.getConfig()
+                    .setSocketTimeout(5000)
+                    .setConnectTimeout(5000);
+        }
+        autoRefresh(R.color.colorPrimary);
     }
 
     @Override
@@ -58,17 +80,11 @@ public class AppListFragment extends SwipeRefreshListFragment {
 
     @Override
     public void onRefresh() {
-        getSwipeRefreshLayout().getScrollView().postDelayed(new Runnable() {
+        adapter.clear(false);
+        executeAsync(URL);
+        getSwipeRefreshLayout().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (adapter.isEmpty()) {
-                    for (int i = 0; i < footerIndex; i++) {
-                        objects.add("数据 = " + i);
-                    }
-                } else {
-                    objects.add(0, "下拉 = " + (--index));
-                }
-                adapter.notifyDataSetChanged();
                 setRefreshing(false);
             }
         }, 1000);
@@ -76,18 +92,41 @@ public class AppListFragment extends SwipeRefreshListFragment {
 
     @Override
     public void onListLoad() {
-        getSwipeRefreshLayout().getScrollView().postDelayed(new Runnable() {
+        executeAsync(URL);
+        getSwipeRefreshLayout().postDelayed(new Runnable() {
             @Override
             public void run() {
-                int count = footerIndex + 5;
-                for (int i = footerIndex; i < count; i++) {
-                    objects.add("上拉 = " + i);
-                }
-                footerIndex = count;
-                adapter.notifyDataSetChanged();
                 setLoading(false);
             }
-        }, 2000);
+        }, 1000);
+    }
+
+    private void executeAsync(String url) {
+        StringRequest stringRequest = new StringRequest(url).setMethod(HttpMethods.Get)
+                .setHttpListener(new HttpListener<String>() {
+                    @Override
+                    public void onLoading(AbstractRequest<String> request, long total, long len) {
+                        super.onLoading(request, total, len);
+                    }
+
+                    @Override
+                    public void onSuccess(String s, Response<String> response) {
+                        String result = response.getResult();
+                        List<String> imgSrcList = getImgSrcList(result);
+                        adapter.addAll(imgSrcList);
+                    }
+
+                    @Override
+                    public void onStart(AbstractRequest<String> request) {
+                        super.onStart(request);
+                    }
+
+                    @Override
+                    public void onUploading(AbstractRequest<String> request, long total, long len) {
+                        super.onUploading(request, total, len);
+                    }
+                });
+        liteHttp.executeAsync(stringRequest);
     }
 
     @Override
@@ -100,5 +139,18 @@ public class AppListFragment extends SwipeRefreshListFragment {
         objects.clear();
         adapter.notifyDataSetChanged();
         return super.onOptionsItemSelected(item);
+    }
+
+    private static List<String> getImgSrcList(String htmlStr) {
+        List<String> pics = new ArrayList<>();
+        Pattern pImage = Pattern.compile(REGEX_IMG, Pattern.CASE_INSENSITIVE);
+        Matcher mImage = pImage.matcher(htmlStr);
+        while (mImage.find()) {
+            String src = mImage.group(1);
+            if (src.length() < 100) {
+                pics.add("http://" + src + ".jpg");
+            }
+        }
+        return pics;
     }
 }

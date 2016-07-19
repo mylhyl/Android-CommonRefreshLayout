@@ -1,5 +1,6 @@
 package com.mylhyl.crlayout.sample.app;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.mylhyl.crlayout.IFooterLayout;
 import com.mylhyl.crlayout.SwipeRefreshAdapterView;
 import com.mylhyl.crlayout.SwipeRefreshGridView;
 import com.mylhyl.crlayout.sample.R;
@@ -52,6 +54,8 @@ public class GridViewFragment extends Fragment implements SwipeRefreshLayout.OnR
         ImageView emptyView = new ImageView(getContext());
         emptyView.setImageResource(R.mipmap.empty);
         swipeRefreshGridView.setEmptyView(emptyView);
+
+        swipeRefreshGridView.setFooterResource(R.layout.swipe_refresh_footer);
     }
 
     @Override
@@ -61,6 +65,12 @@ public class GridViewFragment extends Fragment implements SwipeRefreshLayout.OnR
         swipeRefreshGridView.setOnItemClickListener(this);
         swipeRefreshGridView.setOnListLoadListener(this);
         swipeRefreshGridView.setOnRefreshListener(this);
+
+        //注意在 setOnListLoadListener 之后使用
+        IFooterLayout footerLayout = swipeRefreshGridView.getFooterLayout();
+        footerLayout.setFooterText("加载更多数据...");
+        footerLayout.setFooterTextSize(18);
+        footerLayout.setFooterTextColor(Color.GREEN);
 
         for (int i = 0; i < footerIndex; i++) {
             objects.add("Grid数据 = " + i);

@@ -1,6 +1,7 @@
 package com.mylhyl.crlayout;
 
 import android.content.Context;
+import android.support.annotation.ColorRes;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
@@ -31,16 +32,20 @@ final class MultiSwipeRefreshLayout extends SwipeRefreshLayout {
         mSpinnerFinalOffset = DEFAULT_CIRCLE_TARGET * metrics.density;
         // 触发移动事件的最短距离，如果小于这个距离就不触发移动控件
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
-
-        setColorSchemeResources(DEFAULT_COLOR_RES);
     }
 
     public final void autoRefresh() {
-        autoRefresh(false, 0, (int) mSpinnerFinalOffset);
+        autoRefresh(DEFAULT_COLOR_RES);
     }
 
-    public final void autoRefresh(boolean scale, int start, int end) {
+    public final void autoRefresh(@ColorRes int... colorResIds) {
+        autoRefresh(false, 0, (int) mSpinnerFinalOffset, colorResIds);
+    }
+
+    public final void autoRefresh(boolean scale, int start, int end, @ColorRes int... colorResIds) {
+        setColorSchemeResources(colorResIds);
         // 显示下拉动画，关键在于源码中的 mUsingCustomStart = true
+        //有二种方法显示动画，我的文章：http://blog.csdn.net/hupei/article/details/51953370
         setProgressViewOffset(scale, start, end);
     }
 

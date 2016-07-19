@@ -21,6 +21,7 @@ abstract class SwipeRefreshAdapterFragment<T extends SwipeRefreshAdapterView> ex
     public final void setEnabledLoad(boolean enabled) {
         if (enabled)
             mSwipeRefresh.setOnListLoadListener(this);
+        mSwipeRefresh.setEnabledLoad(enabled);
     }
 
 

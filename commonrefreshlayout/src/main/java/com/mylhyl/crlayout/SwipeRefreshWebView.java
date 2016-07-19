@@ -41,7 +41,6 @@ public class SwipeRefreshWebView extends BaseSwipeRefresh<WebView> {
 
     public void showProgressView() {
         autoRefresh();
-        setRefreshing(true);
     }
 
     @Override
