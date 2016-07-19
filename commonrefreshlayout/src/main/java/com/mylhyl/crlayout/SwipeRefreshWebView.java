@@ -38,24 +38,17 @@ public class SwipeRefreshWebView extends BaseSwipeRefresh<WebView> {
         getScrollView().setWebChromeClient(defaultWebChromeClient);
     }
 
-    public void loadUrlAndShowProgress(String url) {
-        showProgressView();
-        getScrollView().loadUrl(url);
+    @Override
+    public final void autoRefresh() {
+        mLoadSwipeRefresh.autoRefresh();
+        mLoadSwipeRefresh.setRefreshing(true);
     }
 
-    public void loadUrlAndShowProgress(String url, @ColorRes int... colorResIds) {
-        showProgressView(colorResIds);
-        getScrollView().loadUrl(url);
-    }
-
-    public void showProgressView() {
-        getSwipeRefreshLayout().autoRefresh();
-        getSwipeRefreshLayout().setRefreshing(true);
-    }
-
-    public void showProgressView(@ColorRes final int... colorResIds) {
-        getSwipeRefreshLayout().autoRefresh(colorResIds);
-        getSwipeRefreshLayout().setRefreshing(true);
+    @Override
+    public final void autoRefresh(@ColorRes int... colorResIds) {
+        //重写主要是为了显示动画时，不响应 onRefresh() 方法
+        mLoadSwipeRefresh.autoRefresh(colorResIds);
+        mLoadSwipeRefresh.setRefreshing(true);
     }
 
     @Override

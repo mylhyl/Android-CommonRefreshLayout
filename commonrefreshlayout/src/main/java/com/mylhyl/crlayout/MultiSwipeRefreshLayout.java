@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.AbsListView;
 
-public final class MultiSwipeRefreshLayout extends SwipeRefreshLayout {
+final class MultiSwipeRefreshLayout extends SwipeRefreshLayout {
     // Default offset in dips from the top of the view to where the progress spinner should stop
     private static final int DEFAULT_CIRCLE_TARGET = 64;
     private float mSpinnerFinalOffset;

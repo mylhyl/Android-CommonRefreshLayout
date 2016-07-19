@@ -37,7 +37,7 @@ public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout impl
     protected abstract T createScrollView(Context context, AttributeSet attrs);
 
     private FrameLayout mRefreshLayoutWrapper;
-    private MultiSwipeRefreshLayout mLoadSwipeRefresh;
+    protected MultiSwipeRefreshLayout mLoadSwipeRefresh;
     private T mScrollView;
     private View mEmptyView;
 
@@ -98,13 +98,13 @@ public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout impl
     }
 
     @Override
-    public final void autoRefresh() {
+    public void autoRefresh() {
         mLoadSwipeRefresh.autoRefresh();
         this.setRefreshing(true);
     }
 
     @Override
-    public final void autoRefresh(@ColorRes int... colorResIds) {
+    public void autoRefresh(@ColorRes int... colorResIds) {
         mLoadSwipeRefresh.autoRefresh(colorResIds);
         this.setRefreshing(true);
     }
@@ -193,7 +193,7 @@ public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout impl
     }
 
     @Override
-    public final MultiSwipeRefreshLayout getSwipeRefreshLayout() {
+    public final SwipeRefreshLayout getSwipeRefreshLayout() {
         return mLoadSwipeRefresh;
     }
 }

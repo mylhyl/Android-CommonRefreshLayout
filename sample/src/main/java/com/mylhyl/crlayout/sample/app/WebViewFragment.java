@@ -40,14 +40,16 @@ public class WebViewFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
-        swipeRefreshWebView.loadUrlAndShowProgress("https://github.com/mylhyl", R.color.colorPrimary);
-        swipeRefreshWebView.getScrollView().setWebViewClient(new SampleWebViewClient());
+        swipeRefreshWebView.autoRefresh(R.color.colorPrimary);
+        WebView scrollView = swipeRefreshWebView.getScrollView();
+        scrollView.loadUrl("https://github.com/mylhyl");
+        scrollView.setWebViewClient(new SampleWebViewClient());
     }
 
     private class SampleWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            swipeRefreshWebView.showProgressView();
+            swipeRefreshWebView.autoRefresh();
             view.loadUrl(url);
             return true;
         }

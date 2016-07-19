@@ -73,7 +73,7 @@
 
 ####使用Gradle构建时添加一下依赖即可:
 ```javascript
-compile 'com.mylhyl:commonrefreshlayout:1.4'
+compile 'com.mylhyl:commonrefreshlayout:1.5'
 ```
 #### 如果使用eclipse
 只能`clone`源码，然后在 eclipse 中用`library`方式引用
@@ -92,3 +92,5 @@ compile 'com.mylhyl:commonrefreshlayout:1.4'
 > 1.3 增加autoRefresh(@ColorRes int... colorResIds)方法，指定动画颜色
 
 > 1.4 优化SwipeRefreshWebView显示下拉动画
+
+> 1.5 优化SwipeRefreshWebView的autoRefresh方法
