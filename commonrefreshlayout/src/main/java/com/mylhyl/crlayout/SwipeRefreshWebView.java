@@ -1,6 +1,7 @@
 package com.mylhyl.crlayout;
 
 import android.content.Context;
+import android.support.annotation.ColorRes;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
 import android.webkit.WebChromeClient;
@@ -25,7 +26,6 @@ public class SwipeRefreshWebView extends BaseSwipeRefresh<WebView> {
                 setRefreshing(false);
             }
         }
-
     };
 
     public SwipeRefreshWebView(Context context) {
@@ -34,13 +34,28 @@ public class SwipeRefreshWebView extends BaseSwipeRefresh<WebView> {
 
     public SwipeRefreshWebView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        showProgressView();
         setOnRefreshListener(refreshListener);
         getScrollView().setWebChromeClient(defaultWebChromeClient);
     }
 
+    public void loadUrlAndShowProgress(String url) {
+        showProgressView();
+        getScrollView().loadUrl(url);
+    }
+
+    public void loadUrlAndShowProgress(String url, @ColorRes int... colorResIds) {
+        showProgressView(colorResIds);
+        getScrollView().loadUrl(url);
+    }
+
     public void showProgressView() {
-        autoRefresh();
+        getSwipeRefreshLayout().autoRefresh();
+        getSwipeRefreshLayout().setRefreshing(true);
+    }
+
+    public void showProgressView(@ColorRes final int... colorResIds) {
+        getSwipeRefreshLayout().autoRefresh(colorResIds);
+        getSwipeRefreshLayout().setRefreshing(true);
     }
 
     @Override

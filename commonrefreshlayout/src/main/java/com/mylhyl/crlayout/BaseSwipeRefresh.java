@@ -193,7 +193,7 @@ public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout impl
     }
 
     @Override
-    public final SwipeRefreshLayout getSwipeRefreshLayout() {
+    public final MultiSwipeRefreshLayout getSwipeRefreshLayout() {
         return mLoadSwipeRefresh;
     }
 }

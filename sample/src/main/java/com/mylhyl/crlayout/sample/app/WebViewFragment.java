@@ -4,13 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebResourceError;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -45,15 +40,15 @@ public class WebViewFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
-        swipeRefreshWebView.getScrollView().loadUrl("https://github.com/mylhyl");
+        swipeRefreshWebView.loadUrlAndShowProgress("https://github.com/mylhyl", R.color.colorPrimary);
         swipeRefreshWebView.getScrollView().setWebViewClient(new SampleWebViewClient());
     }
 
     private class SampleWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            view.loadUrl(url);
             swipeRefreshWebView.showProgressView();
+            view.loadUrl(url);
             return true;
         }
     }
