@@ -16,6 +16,7 @@ import com.litesuits.http.request.AbstractRequest;
 import com.litesuits.http.request.StringRequest;
 import com.litesuits.http.request.param.HttpMethods;
 import com.litesuits.http.response.Response;
+import com.mylhyl.crlayout.internal.LoadConfig;
 import com.mylhyl.crlayout.app.SwipeRefreshListFragment;
 import com.mylhyl.crlayout.sample.R;
 import com.mylhyl.cygadapter.CygAdapter;
@@ -35,6 +36,7 @@ public class AppListFragment extends SwipeRefreshListFragment {
     private CygAdapter<String> adapter;
     private List<String> objects = new ArrayList<>();
     private LiteHttp liteHttp;
+    private int index;
 
     public static AppListFragment newInstance() {
         return new AppListFragment();
@@ -59,6 +61,8 @@ public class AppListFragment extends SwipeRefreshListFragment {
         };
         setListAdapter(adapter);
         setEmptyText("无数据");
+        LoadConfig loadConfig = getSwipeRefreshLayout().getLoadConfig();
+        loadConfig.setLoadCompletedText("亲，数据加载完了！");
         if (liteHttp == null) {
             liteHttp = LiteHttp.build(getContext())
                     .setSocketTimeout(5000)
@@ -80,6 +84,7 @@ public class AppListFragment extends SwipeRefreshListFragment {
 
     @Override
     public void onRefresh() {
+        index = 0;
         adapter.clear(false);
         executeAsync(URL);
         getSwipeRefreshLayout().postDelayed(new Runnable() {
@@ -97,6 +102,10 @@ public class AppListFragment extends SwipeRefreshListFragment {
             @Override
             public void run() {
                 setLoading(false);
+                ++index;
+                if (index == 1) {
+                    getSwipeRefreshLayout().setLoadCompleted(true);
+                }
             }
         }, 1000);
     }

@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.mylhyl.crlayout.SwipeRefreshAdapterView;
 import com.mylhyl.crlayout.SwipeRefreshListView;
+import com.mylhyl.crlayout.internal.LoadConfig;
 import com.mylhyl.crlayout.sample.R;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class ListViewFragment extends Fragment implements SwipeRefreshLayout.OnR
     private ArrayAdapter<String> adapter;
     private List<String> objects = new ArrayList<>();
     private int index;
-    private int footerIndex = 20;
+    private int pagerSize = 20;
 
     public ListViewFragment() {
     }
@@ -70,12 +71,11 @@ public class ListViewFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         initListViewHead();
 
-//        IFooterLayout footerLayout = swipeRefreshListView.getFooterLayout();
-//        footerLayout.setFooterText("set自定义加载");
-//        footerLayout.setIndeterminateDrawable(getResources().getDrawable(R.drawable.footer_progressbar));
+        LoadConfig loadConfig = swipeRefreshListView.getLoadConfig();
+        loadConfig.setLoadViewBackgroundColor(getResources().getColor(android.R.color.darker_gray));
         swipeRefreshListView.setEmptyText("数据呢？");
 
-        for (int i = 0; i < footerIndex; i++) {
+        for (int i = 0; i < pagerSize; i++) {
             objects.add("数据 = " + i);
         }
         adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, objects);
@@ -180,6 +180,7 @@ public class ListViewFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void onRefresh() {
+        index = 0;
         swipeRefreshListView.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -192,16 +193,21 @@ public class ListViewFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void onListLoad() {
+        ++index;
         swipeRefreshListView.postDelayed(new Runnable() {
             @Override
             public void run() {
-                int count = footerIndex + 10;
-                for (int i = footerIndex; i < count; i++) {
+                int count = pagerSize + 10;
+                for (int i = pagerSize; i < count; i++) {
                     objects.add("上拉 = " + i);
                 }
-                footerIndex = count;
+                pagerSize = count;
                 adapter.notifyDataSetChanged();
                 swipeRefreshListView.setLoading(false);
+
+                if (index == 1) {
+                    swipeRefreshListView.setLoadCompleted(true);
+                }
             }
         }, 1000);
     }

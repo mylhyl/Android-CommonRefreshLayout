@@ -11,7 +11,7 @@ import android.widget.ExpandableListView;
 
 /**
  * SwipeRefreshLayout 包含 ExpandableListView 布局<br>
- * 如须自定义加载框，可继承此类重写 {@link #getFooterResource()}  getFooterResource}
+ * 如须自定义加载框，可继承此类重写 {@link #getLoadLayoutResource()}  getLoadLayoutResource}
  * <p>Created by hupei on 2016/5/16.
  */
 public class SwipeRefreshExpandableListView extends SwipeRefreshAbsListView<ExpandableListView> {

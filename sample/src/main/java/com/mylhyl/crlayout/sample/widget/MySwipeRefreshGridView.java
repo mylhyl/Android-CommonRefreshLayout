@@ -19,7 +19,7 @@ public class MySwipeRefreshGridView extends SwipeRefreshGridView {
     }
 
     @Override
-    protected int getFooterResource() {
+    protected int getLoadLayoutResource() {
         return R.layout.swipe_refresh_footer;
     }
 }

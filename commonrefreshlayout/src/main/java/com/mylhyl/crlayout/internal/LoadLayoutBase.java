@@ -11,24 +11,26 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.mylhyl.crlayout.IFooterLayout;
-
 /**
  * 上拉加载 layout 基类
  * Created by hupei on 2016/5/19.
  */
-abstract class FooterLayoutBase extends LinearLayout implements IFooterLayout {
+public abstract class LoadLayoutBase extends LinearLayout implements LoadConfig {
+
+    private String mFooterText;
+    private String mCompletedText;
+
     protected ProgressBar mProgressBar;
     protected TextView mTextView;
 
     abstract void createFooter(ViewGroup v);
 
-    public FooterLayoutBase(Context context) {
+    public LoadLayoutBase(Context context) {
         super(context);
         createFooter(this);
     }
 
-    public FooterLayoutBase(Context context, View v) {
+    public LoadLayoutBase(Context context, View v) {
         super(context);
         createFooter((ViewGroup) v);
     }
@@ -38,37 +40,38 @@ abstract class FooterLayoutBase extends LinearLayout implements IFooterLayout {
     }
 
     @Override
-    public void setFooterHeight(int height) {
+    public void setLoadViewHeight(int height) {
         ViewGroup.LayoutParams params = getLayoutParams();
         params.height = pxTdp(height);
         setLayoutParams(params);
     }
 
     @Override
-    public void setFooterText(CharSequence text) {
+    public void setLoadText(String text) {
+        mFooterText = text;
         if (mTextView != null)
             mTextView.setText(text);
     }
 
     @Override
-    public void setFooterTextSize(float size) {
+    public void setLoadTextSize(float size) {
         if (mTextView != null)
             mTextView.setTextSize(size);
     }
 
     @Override
-    public void setFooterTextColor(@ColorInt int color) {
+    public void setLoadTextColor(@ColorInt int color) {
         if (mTextView != null)
             mTextView.setTextColor(color);
     }
 
     @Override
-    public void setFooterBackgroundResource(@DrawableRes int resId) {
+    public void setLoadViewBackgroundResource(@DrawableRes int resId) {
         setBackgroundResource(resId);
     }
 
     @Override
-    public void setFooterBackgroundColor(@ColorInt int color) {
+    public void setLoadViewBackgroundColor(@ColorInt int color) {
         setBackgroundColor(color);
     }
 
@@ -82,5 +85,20 @@ abstract class FooterLayoutBase extends LinearLayout implements IFooterLayout {
     public void setIndeterminateDrawable(Drawable d) {
         if (mProgressBar != null)
             mProgressBar.setIndeterminateDrawable(d);
+    }
+
+    @Override
+    public void setLoadCompletedText(String text) {
+        mCompletedText = text;
+        if (mTextView != null)
+            mTextView.setText(text);
+    }
+
+    public String getFooterText() {
+        return mFooterText;
+    }
+
+    public String getCompletedText() {
+        return mCompletedText;
     }
 }

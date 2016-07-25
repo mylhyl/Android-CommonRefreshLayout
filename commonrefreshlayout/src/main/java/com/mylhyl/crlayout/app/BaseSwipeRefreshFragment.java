@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mylhyl.crlayout.BaseSwipeRefresh;
-import com.mylhyl.crlayout.ISwipeRefresh;
+import com.mylhyl.crlayout.internal.ISwipeRefresh;
 
 /**
  * Google自家下拉刷新 SwipeRefreshLayout <br>

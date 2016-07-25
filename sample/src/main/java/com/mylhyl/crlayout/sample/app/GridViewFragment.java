@@ -16,7 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.mylhyl.crlayout.IFooterLayout;
+import com.mylhyl.crlayout.internal.LoadConfig;
 import com.mylhyl.crlayout.SwipeRefreshAdapterView;
 import com.mylhyl.crlayout.SwipeRefreshGridView;
 import com.mylhyl.crlayout.sample.R;
@@ -55,7 +55,7 @@ public class GridViewFragment extends Fragment implements SwipeRefreshLayout.OnR
         emptyView.setImageResource(R.mipmap.empty);
         swipeRefreshGridView.setEmptyView(emptyView);
 
-        swipeRefreshGridView.setFooterResource(R.layout.swipe_refresh_footer);
+        swipeRefreshGridView.setLoadLayoutResource(R.layout.swipe_refresh_footer);
     }
 
     @Override
@@ -67,10 +67,10 @@ public class GridViewFragment extends Fragment implements SwipeRefreshLayout.OnR
         swipeRefreshGridView.setOnRefreshListener(this);
 
         //注意在 setOnListLoadListener 之后使用
-        IFooterLayout footerLayout = swipeRefreshGridView.getFooterLayout();
-        footerLayout.setFooterText("加载更多数据...");
-        footerLayout.setFooterTextSize(18);
-        footerLayout.setFooterTextColor(Color.GREEN);
+        LoadConfig loadConfig = swipeRefreshGridView.getLoadConfig();
+        loadConfig.setLoadText("加载更多数据...");
+        loadConfig.setLoadTextSize(18);
+        loadConfig.setLoadTextColor(Color.GREEN);
 
         for (int i = 0; i < footerIndex; i++) {
             objects.add("Grid数据 = " + i);
@@ -82,6 +82,7 @@ public class GridViewFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void onRefresh() {
+        index = 0;
         swipeRefreshGridView.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -94,6 +95,7 @@ public class GridViewFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void onListLoad() {
+        ++index;
         swipeRefreshGridView.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -104,6 +106,9 @@ public class GridViewFragment extends Fragment implements SwipeRefreshLayout.OnR
                 footerIndex = count;
                 adapter.notifyDataSetChanged();
                 swipeRefreshGridView.setLoading(false);
+                if (index == 1) {
+                    swipeRefreshGridView.setLoadCompleted(true);
+                }
             }
         }, 2000);
     }

@@ -1,4 +1,4 @@
-package com.mylhyl.crlayout;
+package com.mylhyl.crlayout.internal;
 
 import android.support.annotation.ColorRes;
 import android.support.v4.widget.SwipeRefreshLayout;

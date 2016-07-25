@@ -7,6 +7,8 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 
+import com.mylhyl.crlayout.internal.ILoadSwipeRefresh;
+
 /**
  * SwipeRefreshLayout 加 AbsListView 布局<br>
  * 子类必须实现 {@linkplain BaseSwipeRefresh#createScrollView(Context, AttributeSet)}  createScrollView}方法

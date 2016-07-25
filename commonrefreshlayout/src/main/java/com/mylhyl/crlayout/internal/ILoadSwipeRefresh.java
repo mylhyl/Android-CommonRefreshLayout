@@ -1,4 +1,6 @@
-package com.mylhyl.crlayout;
+package com.mylhyl.crlayout.internal;
+
+import com.mylhyl.crlayout.SwipeRefreshAdapterView;
 
 /**
  * Created by hupei on 2016/5/18.
@@ -7,7 +9,7 @@ public interface ILoadSwipeRefresh {
 
     void setOnListLoadListener(SwipeRefreshAdapterView.OnListLoadListener onListLoadListener);
 
-    void setFooterResource(int resource);
+    void setLoadLayoutResource(int resource);
 
     void loadData();
 
@@ -39,6 +41,13 @@ public interface ILoadSwipeRefresh {
      */
     boolean isEnabledLoad();
 
-    IFooterLayout getFooterLayout();
+    /**
+     * 设置加载完成
+     *
+     * @param loadCompleted
+     */
+    void setLoadCompleted(boolean loadCompleted);
+
+    LoadConfig getLoadConfig();
 
 }

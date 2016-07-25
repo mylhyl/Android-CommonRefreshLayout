@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.mylhyl.crlayout.SwipeRefreshAdapterView;
 import com.mylhyl.crlayout.SwipeRefreshRecyclerView;
+import com.mylhyl.crlayout.internal.LoadConfig;
 import com.mylhyl.crlayout.sample.R;
 
 import java.util.ArrayList;
@@ -69,6 +70,7 @@ public class RecyclerViewFragment extends Fragment implements SwipeRefreshLayout
 
     @Override
     public void onRefresh() {
+        index = 0;
         swipeRefreshRecyclerView.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -81,6 +83,7 @@ public class RecyclerViewFragment extends Fragment implements SwipeRefreshLayout
 
     @Override
     public void onListLoad() {
+        ++index;
         swipeRefreshRecyclerView.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -91,6 +94,9 @@ public class RecyclerViewFragment extends Fragment implements SwipeRefreshLayout
                 footerIndex = count;
                 adapter.notifyDataSetChanged();
                 swipeRefreshRecyclerView.setLoading(false);
+                if (index == 1) {
+                    swipeRefreshRecyclerView.setLoadCompleted(true);
+                }
             }
         }, 2000);
     }

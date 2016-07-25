@@ -14,6 +14,8 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.mylhyl.crlayout.internal.ISwipeRefresh;
+
 /**
  * android v4 兼容包 中 SwipeRefreshLayout 刷新控件，支持上拉加载
  * <p/>
@@ -25,7 +27,7 @@ import android.widget.TextView;
  * </pre>
  * Created by hupei on 2016/5/12.
  */
-public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout implements ISwipeRefresh {
+public abstract class BaseSwipeRefresh<T extends View> extends FrameLayout implements ISwipeRefresh {
 
     /**
      * 创建可滑动 View，子类实现
@@ -42,6 +44,8 @@ public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout impl
     private View mEmptyView;
 
     private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener;
+
+    protected boolean isLoadCompleted;
 
     public BaseSwipeRefresh(Context context) {
         this(context, null);
@@ -63,10 +67,6 @@ public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout impl
     }
 
     private void init(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-
-        setOrientation(LinearLayout.VERTICAL);
-        setGravity(Gravity.CENTER);
-
         mLoadSwipeRefresh = new MultiSwipeRefreshLayout(context, attrs);
         mScrollView = createScrollView(context, attrs);
         mEmptyView = createEmptyView(context);
@@ -181,6 +181,7 @@ public abstract class BaseSwipeRefresh<T extends View> extends LinearLayout impl
 
     @Override
     public final void setRefreshing(boolean refreshing) {
+        isLoadCompleted = false;
         mLoadSwipeRefresh.setRefreshing(refreshing);
         // 下拉刷新中，此处目的是为了手动调用 setRefreshing(true)时，响应下拉刷新事件
         if (mLoadSwipeRefresh.isRefreshing() && mOnRefreshListener != null)

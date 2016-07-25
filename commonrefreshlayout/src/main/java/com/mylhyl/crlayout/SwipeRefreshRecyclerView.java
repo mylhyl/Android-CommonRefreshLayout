@@ -5,9 +5,11 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.mylhyl.crlayout.internal.ILoadSwipeRefresh;
+
 /**
  * SwipeRefreshLayout 加 RecyclerView 布局<br>
- * 如须自定义加载框，可继承此类重写 {@link #getFooterResource()}  getFooterResource}方法
+ * 如须自定义加载框，可继承此类重写 {@link #getLoadLayoutResource()}  getLoadLayoutResource}方法
  * <p> Created by hupei on 2016/5/12.
  */
 public class SwipeRefreshRecyclerView extends SwipeRefreshAdapterView<RecyclerView> {

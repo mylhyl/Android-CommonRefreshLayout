@@ -14,7 +14,6 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mylhyl.crlayout.ISwipeRefresh;
 import com.mylhyl.crlayout.SwipeRefreshExpandableListView;
 import com.mylhyl.crlayout.app.SwipeRefreshExpandableListFragment;
 import com.mylhyl.crlayout.sample.R;

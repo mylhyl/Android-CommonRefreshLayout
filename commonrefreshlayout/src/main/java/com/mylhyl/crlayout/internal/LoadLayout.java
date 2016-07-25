@@ -1,6 +1,7 @@
 package com.mylhyl.crlayout.internal;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -12,8 +13,8 @@ import android.widget.TextView;
  * 上拉加载 layout 包含 ProgressBar 与 TextView
  * Created by hupei on 2016/5/19.
  */
-public final class FooterLayout extends FooterLayoutBase {
-    public FooterLayout(Context context) {
+public final class LoadLayout extends LoadLayoutBase {
+    public LoadLayout(Context context) {
         super(context);
     }
 
@@ -22,6 +23,7 @@ public final class FooterLayout extends FooterLayoutBase {
         LinearLayout root = (LinearLayout) v;
         root.setOrientation(HORIZONTAL);
         root.setGravity(Gravity.CENTER);
+        root.setBackgroundColor(Color.WHITE);
         root.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, pxTdp(50)));
 
         mProgressBar = new ProgressBar(getContext(), null, android.R.attr.progressBarStyleSmallInverse);

@@ -2,10 +2,12 @@
 <resources>
     <declare-styleable name="crLayout">
         <!-- 自定义加载更多 res layout -->
-        <attr name="footer_layout" format="reference" />
+        <attr name="load_layout" format="reference" />
         <!--加载更多显示的文字-->
-        <attr name="footer_text" format="string" />
+        <attr name="load_text" format="string" />
         <!--加载更多的进度菊花-->
-        <attr name="footer_indeterminate_drawable" format="reference"/>
+        <attr name="load_indeterminate_drawable" format="reference" />
+        <!--加载更多完成显示的文字-->
+        <attr name="load_completed_text" format="string" />
     </declare-styleable>
 </resources>

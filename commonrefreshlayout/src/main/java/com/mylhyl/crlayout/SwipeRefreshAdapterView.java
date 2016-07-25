@@ -7,22 +7,28 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import com.mylhyl.crlayout.internal.FooterLayout;
-import com.mylhyl.crlayout.internal.FooterLayoutConvert;
+import com.mylhyl.crlayout.internal.ILoadSwipeRefresh;
+import com.mylhyl.crlayout.internal.LoadConfig;
+import com.mylhyl.crlayout.internal.LoadLayout;
+import com.mylhyl.crlayout.internal.LoadLayoutBase;
+import com.mylhyl.crlayout.internal.LoadLayoutConvert;
 
 public abstract class SwipeRefreshAdapterView<T extends View> extends BaseSwipeRefresh<T> implements ILoadSwipeRefresh {
 
     private static final String DEFAULT_FOOTER_TEXT = "加载数据中...";
+    private static final String DEFAULT_FOOTER_COMPLETED_TEXT = "没有更多了";
 
     private boolean mLoading;// 是否处于上拉加载状态中
     private boolean mEnabledLoad;// 是否允许上拉加载
-    private View mFooterView;
-    private int mFooterResource;
-    private String mFooterText;
-    private Drawable mFooterIndeterminateDrawable;
+    private LoadLayoutBase mLoadLayout;
+    private int mLoadResource;
+    private String mLoadText;
+    private String mCompletedText;
+    private Drawable mLoadIndeterminateDrawable;
 
     private OnListLoadListener mOnListLoadListener;
 
@@ -50,55 +56,58 @@ public abstract class SwipeRefreshAdapterView<T extends View> extends BaseSwipeR
         if (crLayout != null && crLayout.length > 0) {
             final TypedArray a = context.obtainStyledAttributes(attrs, crLayout, defStyleAttr, defStyleRes);
             if (a != null) {
-                mFooterResource = a.getResourceId(R.styleable.crLayout_footer_layout, 0);
-                mFooterText = a.getString(R.styleable.crLayout_footer_text);
-                mFooterIndeterminateDrawable = a.getDrawable(R.styleable.crLayout_footer_indeterminate_drawable);
-
+                mLoadResource = a.getResourceId(R.styleable.crLayout_load_layout, 0);
+                mLoadText = a.getString(R.styleable.crLayout_load_text);
+                mLoadIndeterminateDrawable = a.getDrawable(R.styleable.crLayout_load_indeterminate_drawable);
+                mCompletedText = a.getString(R.styleable.crLayout_load_completed_text);
                 a.recycle();
             }
         }
-        if (TextUtils.isEmpty(mFooterText))
-            mFooterText = DEFAULT_FOOTER_TEXT;
-
     }
 
     @Override
     public final void setOnListLoadListener(OnListLoadListener onListLoadListener) {
         this.mOnListLoadListener = onListLoadListener;
         setEnabledLoad(mOnListLoadListener != null);
-        addFooterView();
+        addLoadLayout();
     }
 
-    private void addFooterView() {
-        if (mFooterView == null && mOnListLoadListener != null) {
-            createFooter();//创建上拉加载 View
-            if (mFooterView == null)
+    private void addLoadLayout() {
+        if (mLoadLayout == null && mOnListLoadListener != null) {
+            createLoadLayout();//创建上拉加载 View
+            if (mLoadLayout == null)
                 throw new NullPointerException("method onCreateFooterView cannot return null");
-            //如是自定义 FooterView 的，则转换
-            boolean b = mFooterView instanceof IFooterLayout;
-            if (!b) {
-                mFooterView = new FooterLayoutConvert(getContext(), mFooterView);
-            }
-            addView(mFooterView);
-            hideFooter();
+            LayoutParams layoutParams = new LayoutParams(mLoadLayout.getLayoutParams());
+            layoutParams.gravity = Gravity.BOTTOM;
+            addView(mLoadLayout, layoutParams);
+            hideLoadLayout();
         }
     }
 
-    private void createFooter() {
-        if ((mFooterResource = getFooterResource()) > 0) {
-            mFooterView = LayoutInflater.from(getContext()).inflate(mFooterResource, this, false);
+    private void createLoadLayout() {
+        if ((mLoadResource = getLoadLayoutResource()) > 0) {
+            View view = LayoutInflater.from(getContext()).inflate(mLoadResource, this, false);
+            mLoadLayout = new LoadLayoutConvert(getContext(), view);
         } else {
-            FooterLayout footerLayout = new FooterLayout(getContext());
-            footerLayout.setFooterText(mFooterText);
-            if (mFooterIndeterminateDrawable != null)
-                footerLayout.setIndeterminateDrawable(mFooterIndeterminateDrawable);
-            mFooterView = footerLayout;
+            LoadLayout footerLayout = new LoadLayout(getContext());
+            mLoadLayout = footerLayout;
         }
+
+        if (TextUtils.isEmpty(mCompletedText))
+            mCompletedText = DEFAULT_FOOTER_COMPLETED_TEXT;
+        mLoadLayout.setLoadCompletedText(mCompletedText);
+
+        if (TextUtils.isEmpty(mLoadText))
+            mLoadText = DEFAULT_FOOTER_TEXT;
+        mLoadLayout.setLoadText(mLoadText);
+
+        if (mLoadIndeterminateDrawable != null)
+            mLoadLayout.setIndeterminateDrawable(mLoadIndeterminateDrawable);
     }
 
     @Override
-    public final void setFooterResource(int resource) {
-        mFooterResource = resource;
+    public final void setLoadLayoutResource(int resource) {
+        mLoadResource = resource;
     }
 
     /**
@@ -106,8 +115,8 @@ public abstract class SwipeRefreshAdapterView<T extends View> extends BaseSwipeR
      *
      * @return
      */
-    protected int getFooterResource() {
-        return mFooterResource;
+    protected int getLoadLayoutResource() {
+        return mLoadResource;
     }
 
 
@@ -115,25 +124,41 @@ public abstract class SwipeRefreshAdapterView<T extends View> extends BaseSwipeR
     public final void loadData() {
         if (mOnListLoadListener != null) {
             setLoading(true);// 设置状态
-            mOnListLoadListener.onListLoad();
+            if (!isLoadCompleted)
+                mOnListLoadListener.onListLoad();
         }
     }
 
     @Override
     public final void setLoading(boolean loading) {
         this.mLoading = loading;
-        if (mLoading) showFooter();
-        else hideFooter();
+        if (mLoading) showLoadLayout();
+        else hideLoadLayout();
     }
 
-    private void showFooter() {
-        if (mFooterView != null)
-            mFooterView.setVisibility(VISIBLE);
+    private void showLoadLayout() {
+        if (mLoadLayout != null) {
+            LoadConfig footerLayout = getLoadConfig();
+            if (isLoadCompleted) {
+                footerLayout.setLoadCompletedText(mLoadLayout.getCompletedText());
+                footerLayout.setProgressBarVisibility(View.GONE);
+                mLoadLayout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        setLoading(false);
+                    }
+                }, 1000);
+            } else {
+                footerLayout.setLoadText(mLoadLayout.getFooterText());
+                footerLayout.setProgressBarVisibility(View.VISIBLE);
+            }
+            mLoadLayout.setVisibility(VISIBLE);
+        }
     }
 
-    private void hideFooter() {
-        if (mFooterView != null)
-            mFooterView.setVisibility(GONE);
+    private void hideLoadLayout() {
+        if (mLoadLayout != null)
+            mLoadLayout.setVisibility(GONE);
     }
 
     @Override
@@ -151,14 +176,16 @@ public abstract class SwipeRefreshAdapterView<T extends View> extends BaseSwipeR
         return mEnabledLoad;
     }
 
+    @Override
+    public void setLoadCompleted(boolean loadCompleted) {
+        isLoadCompleted = loadCompleted;
+    }
 
     @Override
-    public IFooterLayout getFooterLayout() {
-        if (mFooterView == null)
-            throw new NullPointerException("mFooterView is null please call after setOnListLoadListener");
-        if (mFooterView instanceof IFooterLayout)
-            return (IFooterLayout) mFooterView;
-        throw new RuntimeException("mFooterView is no interface IFooterLayout");
+    public LoadConfig getLoadConfig() {
+        if (mLoadLayout == null)
+            throw new NullPointerException("mLoadLayout is null please call after setOnListLoadListener");
+        return mLoadLayout;
     }
 
 

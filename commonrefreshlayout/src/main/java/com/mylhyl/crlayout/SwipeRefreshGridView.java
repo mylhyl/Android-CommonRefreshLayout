@@ -6,7 +6,7 @@ import android.widget.GridView;
 
 /**
  * SwipeRefreshLayout 包含 HeaderGridView 布局<br>
- * 如须自定义加载框，可继承此类重写 {@link #getFooterResource()}  getFooterResource}方法
+ * 如须自定义加载框，可继承此类重写 {@link #getLoadLayoutResource()}  getLoadLayoutResource}方法
  * <p>Created by hupei on 2016/5/17.
  */
 public class SwipeRefreshGridView extends SwipeRefreshAbsListView<GridView> {
