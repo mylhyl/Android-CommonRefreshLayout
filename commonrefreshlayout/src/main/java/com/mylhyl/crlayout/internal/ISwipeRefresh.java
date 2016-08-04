@@ -32,7 +32,19 @@ public interface ISwipeRefresh<T> {
 
     View getEmptyView();
 
+    /**
+     * 设置下拉刷新状态
+     *
+     * @param refreshing true=刷新中；false=刷新完成
+     */
     void setRefreshing(boolean refreshing);
+
+    /**
+     * 禁用下拉刷新
+     *
+     * @param enabled
+     */
+    void setEnabled(boolean enabled);
 
     /**
      * 获取可滑动的 ListView、ExpandableListView、GridView、RecyclerView

@@ -189,6 +189,11 @@ public abstract class BaseSwipeRefresh<T extends View> extends FrameLayout imple
     }
 
     @Override
+    public void setEnabled(boolean enabled) {
+        getSwipeRefreshLayout().setEnabled(enabled);
+    }
+
+    @Override
     public final T getScrollView() {
         return mScrollView;
     }
