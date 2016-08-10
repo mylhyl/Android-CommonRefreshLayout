@@ -47,8 +47,8 @@ public class AppListFragment extends SwipeRefreshListFragment {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
 
+        getSwipeRefreshLayout().setLoadAnimator(true);
         setEnabledLoad(true);
-
 
         adapter = new CygAdapter<String>(getContext(), R.layout.image_item, objects) {
             @Override

@@ -132,13 +132,10 @@ public abstract class SwipeRefreshAdapterView<T extends View> extends BaseSwipeR
     private void addLoadLayout() {
         if (mLoadLayout == null && mOnListLoadListener != null) {
             createLoadLayout();//创建上拉加载 View
-            if (mLoadLayout == null)
-                throw new NullPointerException("method onCreateFooterView cannot return null");
 
             LayoutParams layoutParams = new LayoutParams(mLoadLayout.getLayoutParams());
             layoutParams.gravity = Gravity.BOTTOM;
             addView(mLoadLayout, layoutParams);
-            if (!isLoadAnimator) mLoadLayout.setVisibility(GONE);
         }
     }
 
@@ -150,6 +147,11 @@ public abstract class SwipeRefreshAdapterView<T extends View> extends BaseSwipeR
             LoadLayout footerLayout = new LoadLayout(getContext());
             mLoadLayout = footerLayout;
         }
+        if (mLoadLayout == null)
+            throw new NullPointerException("method onCreateFooterView cannot return null");
+
+        if (!isLoadAnimator) mLoadLayout.setVisibility(GONE);
+
         if (TextUtils.isEmpty(mCompletedText))
             mCompletedText = DEFAULT_FOOTER_COMPLETED_TEXT;
         mLoadLayout.setLoadCompletedText(mCompletedText);
@@ -180,12 +182,11 @@ public abstract class SwipeRefreshAdapterView<T extends View> extends BaseSwipeR
     @Override
     public final void loadData() {
         setLoading(true);
-        if (!isLoadAnimator && mOnListLoadListener != null && !isLoadCompleted)
-            mOnListLoadListener.onListLoad();
     }
 
     @Override
     public final void setLoading(boolean loading) {
+        if (mLoading == loading) return;
         this.mLoading = loading;
         if (mLoading) showLoadLayout();
         else hideLoadLayout();
@@ -208,12 +209,15 @@ public abstract class SwipeRefreshAdapterView<T extends View> extends BaseSwipeR
                 footerLayout.setProgressBarVisibility(View.VISIBLE);
             }
             mLoadLayout.setVisibility(View.VISIBLE);
-            if (isLoadAnimator) mShowLoadAnimator.start();
+
+            if (isLoadAnimator && mShowLoadAnimator != null) mShowLoadAnimator.start();
+            else if (!isLoadAnimator && !isLoadCompleted && mOnListLoadListener != null)
+                mOnListLoadListener.onListLoad();
         }
     }
 
     private void hideLoadLayout() {
-        if (isLoadAnimator) mHideLoadAnimator.start();
+        if (isLoadAnimator && mHideLoadAnimator != null) mHideLoadAnimator.start();
         else mLoadLayout.setVisibility(GONE);
     }
 

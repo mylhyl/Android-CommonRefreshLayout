@@ -54,7 +54,7 @@ public class GridViewFragment extends Fragment implements SwipeRefreshLayout.OnR
         ImageView emptyView = new ImageView(getContext());
         emptyView.setImageResource(R.mipmap.empty);
         swipeRefreshGridView.setEmptyView(emptyView);
-
+        swipeRefreshGridView.setLoadAnimator(true);
         swipeRefreshGridView.setLoadLayoutResource(R.layout.swipe_refresh_footer);
     }
 
