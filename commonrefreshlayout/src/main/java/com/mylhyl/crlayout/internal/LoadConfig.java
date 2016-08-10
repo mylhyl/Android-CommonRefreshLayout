@@ -49,21 +49,21 @@ public interface LoadConfig {
     void setLoadCompletedText(String text);
 
     /**
-     * 设置加载 View 高度
+     * 设置加载更多 Layout 高度
      *
      * @param height
      */
     void setLoadViewHeight(int height);
 
     /**
-     * 设置加载 View 资源背景
+     * 设置加载更多 Layout 资源背景
      *
      * @param resId
      */
     void setLoadViewBackgroundResource(int resId);
 
     /**
-     * 设置加载 View 颜色背景
+     * 设置加载更多 Layout 颜色背景
      *
      * @param color
      */

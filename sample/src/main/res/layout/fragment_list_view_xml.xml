@@ -8,5 +8,6 @@
     android:background="@android:color/darker_gray"
     android:listSelector="@drawable/selector_list"
     crl:load_text="数据正在加载中"
+    crl:empty_text="数据呢？"
     crl:load_indeterminate_drawable="@drawable/footer_progressbar"
     tools:context=".app.ListViewFragment" />

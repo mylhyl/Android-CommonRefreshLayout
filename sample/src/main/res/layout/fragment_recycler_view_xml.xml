@@ -5,7 +5,6 @@
     android:id="@+id/swipeRefresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    crl:load_layout="@layout/swipe_refresh_footer"
     crl:load_completed_text="加载完成"
-    crl:load_text="加载中..."
+    crl:load_animator="true"
     tools:context=".app.RecyclerViewFragment" />

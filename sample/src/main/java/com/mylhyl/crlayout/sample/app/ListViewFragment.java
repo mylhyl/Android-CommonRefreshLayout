@@ -74,7 +74,7 @@ public class ListViewFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         LoadConfig loadConfig = swipeRefreshListView.getLoadConfig();
         loadConfig.setLoadViewBackgroundColor(getResources().getColor(android.R.color.darker_gray));
-        swipeRefreshListView.setEmptyText("数据呢？");
+//        swipeRefreshListView.setEmptyText("数据呢？");
 
         for (int i = 0; i < pagerSize; i++) {
             objects.add("数据 = " + i);

@@ -50,4 +50,10 @@ public interface ILoadSwipeRefresh {
 
     LoadConfig getLoadConfig();
 
+    /**
+     * 设置加载Layout有动画显示效果,默认false
+     *
+     * @param isLoadAnimator true 启用动画
+     */
+    void setLoadAnimator(boolean isLoadAnimator);
 }

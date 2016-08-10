@@ -76,7 +76,7 @@
 
 ####使用Gradle构建时添加一下依赖即可:
 ```javascript
-compile 'com.mylhyl:commonrefreshlayout:1.7'
+compile 'com.mylhyl:commonrefreshlayout:1.8'
 ```
 #### 如果使用eclipse
 只能`clone`源码，然后在 eclipse 中用`library`方式引用
@@ -86,6 +86,8 @@ compile 'com.mylhyl:commonrefreshlayout:1.7'
 ### QQ交流群:435173211
 
 #### 更新日志
+> 1.8 优化加载更多显示效果
+
 > 1.7 新增`setEnabled`禁用下拉刷新
 
 > 1.6 新增加载完成，命名`footer`修改为`load`

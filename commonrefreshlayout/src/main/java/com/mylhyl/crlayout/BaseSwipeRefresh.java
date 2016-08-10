@@ -2,6 +2,7 @@ package com.mylhyl.crlayout;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.os.Build;
 import android.support.annotation.ColorRes;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -42,7 +43,7 @@ public abstract class BaseSwipeRefresh<T extends View> extends FrameLayout imple
     protected MultiSwipeRefreshLayout mLoadSwipeRefresh;
     private T mScrollView;
     private View mEmptyView;
-
+    private String mEmptyViewText = "";
     private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener;
 
     protected boolean isLoadCompleted;
@@ -67,6 +68,14 @@ public abstract class BaseSwipeRefresh<T extends View> extends FrameLayout imple
     }
 
     private void init(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        int[] crLayout = R.styleable.crLayout;
+        if (crLayout != null && crLayout.length > 0) {
+            final TypedArray a = context.obtainStyledAttributes(attrs, crLayout, defStyleAttr, defStyleRes);
+            if (a != null) {
+                mEmptyViewText = a.getString(R.styleable.crLayout_empty_text);
+                a.recycle();
+            }
+        }
         mLoadSwipeRefresh = new MultiSwipeRefreshLayout(context, attrs);
         mScrollView = createScrollView(context, attrs);
         mEmptyView = createEmptyView(context);
@@ -80,6 +89,7 @@ public abstract class BaseSwipeRefresh<T extends View> extends FrameLayout imple
         emptyView.setTextAppearance(context, android.R.attr.textAppearanceSmall);
         emptyView.setGravity(Gravity.CENTER);
         emptyView.setVisibility(View.GONE);
+        emptyView.setText(mEmptyViewText);
         return emptyView;
     }
 

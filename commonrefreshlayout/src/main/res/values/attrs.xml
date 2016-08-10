@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="crLayout">
-        <!-- 自定义加载更多 res layout -->
+        <!-- 自定义加载更多 res layout id-->
         <attr name="load_layout" format="reference" />
         <!--加载更多显示的文字-->
         <attr name="load_text" format="string" />
@@ -9,5 +9,8 @@
         <attr name="load_indeterminate_drawable" format="reference" />
         <!--加载更多完成显示的文字-->
         <attr name="load_completed_text" format="string" />
+        <!--加载更多layout有动画显示效果-->
+        <attr name="load_animator" format="boolean"/>
+        <attr name="empty_text" format="string"/>
     </declare-styleable>
 </resources>

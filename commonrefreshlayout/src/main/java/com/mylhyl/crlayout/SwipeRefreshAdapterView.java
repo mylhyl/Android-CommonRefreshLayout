@@ -1,5 +1,7 @@
 package com.mylhyl.crlayout;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -32,6 +34,11 @@ public abstract class SwipeRefreshAdapterView<T extends View> extends BaseSwipeR
 
     private OnListLoadListener mOnListLoadListener;
 
+    private ValueAnimator mShowLoadAnimator;
+    private ValueAnimator mHideLoadAnimator;
+    private int mLoadLayoutHeight;
+    private boolean isLoadAnimator;
+
     public SwipeRefreshAdapterView(Context context) {
         this(context, null);
     }
@@ -60,9 +67,59 @@ public abstract class SwipeRefreshAdapterView<T extends View> extends BaseSwipeR
                 mLoadText = a.getString(R.styleable.crLayout_load_text);
                 mLoadIndeterminateDrawable = a.getDrawable(R.styleable.crLayout_load_indeterminate_drawable);
                 mCompletedText = a.getString(R.styleable.crLayout_load_completed_text);
+                isLoadAnimator = a.getBoolean(R.styleable.crLayout_load_animator, false);
                 a.recycle();
             }
         }
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        if (isLoadAnimator && mLoadLayout != null && mLoadLayoutHeight == 0) {
+            mLoadLayoutHeight = mLoadLayout.getMeasuredHeight();
+            if (mLoadLayoutHeight > 0) {
+                mLoadLayout.setVisibility(GONE);
+                initShowLoadAnimator();
+                initHideLoadAnimator();
+            }
+        }
+        super.onLayout(changed, left, top, right, bottom);
+    }
+
+    private void initShowLoadAnimator() {
+        mShowLoadAnimator = ValueAnimator.ofFloat(0, mLoadLayoutHeight);
+        mShowLoadAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                LayoutParams lp = (LayoutParams) mLoadLayout.getLayoutParams();
+                lp.height = (int) ((Float) animation.getAnimatedValue()).floatValue();
+                mLoadLayout.setLayoutParams(lp);
+                getScrollView().setTranslationY(-lp.height);
+            }
+        });
+        mShowLoadAnimator.addListener(new SimpleAnimatorListener() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (mOnListLoadListener != null && !isLoadCompleted) {
+                    mOnListLoadListener.onListLoad();
+                }
+            }
+        });
+        mShowLoadAnimator.setDuration(300);
+    }
+
+    private void initHideLoadAnimator() {
+        mHideLoadAnimator = ValueAnimator.ofFloat(mLoadLayoutHeight, 0);
+        mHideLoadAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                LayoutParams lp = (LayoutParams) mLoadLayout.getLayoutParams();
+                lp.height = (int) ((Float) animation.getAnimatedValue()).floatValue();
+                mLoadLayout.setLayoutParams(lp);
+                getScrollView().setTranslationY(-lp.height);
+            }
+        });
+        mHideLoadAnimator.setDuration(300);
     }
 
     @Override
@@ -77,10 +134,11 @@ public abstract class SwipeRefreshAdapterView<T extends View> extends BaseSwipeR
             createLoadLayout();//创建上拉加载 View
             if (mLoadLayout == null)
                 throw new NullPointerException("method onCreateFooterView cannot return null");
+
             LayoutParams layoutParams = new LayoutParams(mLoadLayout.getLayoutParams());
             layoutParams.gravity = Gravity.BOTTOM;
             addView(mLoadLayout, layoutParams);
-            hideLoadLayout();
+            if (!isLoadAnimator) mLoadLayout.setVisibility(GONE);
         }
     }
 
@@ -92,7 +150,6 @@ public abstract class SwipeRefreshAdapterView<T extends View> extends BaseSwipeR
             LoadLayout footerLayout = new LoadLayout(getContext());
             mLoadLayout = footerLayout;
         }
-
         if (TextUtils.isEmpty(mCompletedText))
             mCompletedText = DEFAULT_FOOTER_COMPLETED_TEXT;
         mLoadLayout.setLoadCompletedText(mCompletedText);
@@ -122,11 +179,9 @@ public abstract class SwipeRefreshAdapterView<T extends View> extends BaseSwipeR
 
     @Override
     public final void loadData() {
-        if (mOnListLoadListener != null) {
-            setLoading(true);// 设置状态
-            if (!isLoadCompleted)
-                mOnListLoadListener.onListLoad();
-        }
+        setLoading(true);
+        if (!isLoadAnimator && mOnListLoadListener != null && !isLoadCompleted)
+            mOnListLoadListener.onListLoad();
     }
 
     @Override
@@ -152,13 +207,14 @@ public abstract class SwipeRefreshAdapterView<T extends View> extends BaseSwipeR
                 footerLayout.setLoadText(mLoadLayout.getFooterText());
                 footerLayout.setProgressBarVisibility(View.VISIBLE);
             }
-            mLoadLayout.setVisibility(VISIBLE);
+            mLoadLayout.setVisibility(View.VISIBLE);
+            if (isLoadAnimator) mShowLoadAnimator.start();
         }
     }
 
     private void hideLoadLayout() {
-        if (mLoadLayout != null)
-            mLoadLayout.setVisibility(GONE);
+        if (isLoadAnimator) mHideLoadAnimator.start();
+        else mLoadLayout.setVisibility(GONE);
     }
 
     @Override
@@ -188,11 +244,37 @@ public abstract class SwipeRefreshAdapterView<T extends View> extends BaseSwipeR
         return mLoadLayout;
     }
 
+    @Override
+    public void setLoadAnimator(boolean loadAnimator) {
+        isLoadAnimator = loadAnimator;
+    }
 
     public interface OnListLoadListener {
         /**
          * 当上拉加载时，此方法将被调用
          */
         void onListLoad();
+    }
+
+    static class SimpleAnimatorListener implements Animator.AnimatorListener {
+        @Override
+        public void onAnimationStart(Animator animation) {
+
+        }
+
+        @Override
+        public void onAnimationEnd(Animator animation) {
+
+        }
+
+        @Override
+        public void onAnimationCancel(Animator animation) {
+
+        }
+
+        @Override
+        public void onAnimationRepeat(Animator animation) {
+
+        }
     }
 }
