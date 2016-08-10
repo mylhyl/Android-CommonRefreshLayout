@@ -126,13 +126,12 @@ public abstract class SwipeRefreshAdapterView<T extends View> extends BaseSwipeR
     public final void setOnListLoadListener(OnListLoadListener onListLoadListener) {
         this.mOnListLoadListener = onListLoadListener;
         setEnabledLoad(mOnListLoadListener != null);
-        addLoadLayout();
+        if (mEnabledLoad) addLoadLayout();
     }
 
     private void addLoadLayout() {
-        if (mLoadLayout == null && mOnListLoadListener != null) {
+        if (mLoadLayout == null) {
             createLoadLayout();//创建上拉加载 View
-
             LayoutParams layoutParams = new LayoutParams(mLoadLayout.getLayoutParams());
             layoutParams.gravity = Gravity.BOTTOM;
             addView(mLoadLayout, layoutParams);
@@ -148,7 +147,7 @@ public abstract class SwipeRefreshAdapterView<T extends View> extends BaseSwipeR
             mLoadLayout = footerLayout;
         }
         if (mLoadLayout == null)
-            throw new NullPointerException("method onCreateFooterView cannot return null");
+            throw new NullPointerException("mLoadLayout is null");
 
         if (!isLoadAnimator) mLoadLayout.setVisibility(GONE);
 
@@ -167,6 +166,8 @@ public abstract class SwipeRefreshAdapterView<T extends View> extends BaseSwipeR
     @Override
     public final void setLoadLayoutResource(int resource) {
         mLoadResource = resource;
+        if (mLoadLayout != null)
+            throw new RuntimeException("please call setLoadLayoutResource before setOnListLoadListener");
     }
 
     /**
@@ -243,14 +244,15 @@ public abstract class SwipeRefreshAdapterView<T extends View> extends BaseSwipeR
 
     @Override
     public LoadConfig getLoadConfig() {
-        if (mLoadLayout == null)
-            throw new NullPointerException("mLoadLayout is null please call after setOnListLoadListener");
+        if (mLoadLayout == null) addLoadLayout();
         return mLoadLayout;
     }
 
     @Override
     public void setLoadAnimator(boolean loadAnimator) {
         isLoadAnimator = loadAnimator;
+        if (mLoadLayout != null)
+            throw new RuntimeException("please call setLoadAnimator before setOnListLoadListener");
     }
 
     public interface OnListLoadListener {

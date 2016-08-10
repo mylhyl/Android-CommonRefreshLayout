@@ -40,7 +40,7 @@
 
  自定义上拉加载
  
- * 方式一：注意此方法必须在`setOnListLoadListener`之前调用
+ * 方式一：代码配置
  
 ```java
         getSwipeRefreshLayout().setLoadLayoutResource(R.layout.swipe_refresh_footer);
@@ -74,9 +74,12 @@
 注册`ListView`长按事件怎么办？好说好说提供了方法`getScrollView()`，既然能获取`ListView`那`SwipeRefreshLayout`是不是也可以获取到呢？答案是肯定的，方法`getSwipeRefreshLayout`，你可以随心所欲设置下拉圆圈的颜色、大小等。
 关于更多公开方法见 [ISwipeRefresh](commonrefreshlayout/src/main/java/com/mylhyl/crlayout/internal/ISwipeRefresh.java)、[ILoadSwipeRefresh](commonrefreshlayout/src/main/java/com/mylhyl/crlayout/internal/ILoadSwipeRefresh.java)
 
-####使用Gradle构建时添加一下依赖即可:
+#### 注意事项
+`setLoadAnimator`、`setLoadLayoutResource`方法须在`setOnListLoadListener`之前调用 
+
+#### 使用Gradle构建时添加一下依赖即可:
 ```javascript
-compile 'com.mylhyl:commonrefreshlayout:1.8'
+compile 'com.mylhyl:commonrefreshlayout:1.9'
 ```
 #### 如果使用eclipse
 只能`clone`源码，然后在 eclipse 中用`library`方式引用
@@ -86,6 +89,8 @@ compile 'com.mylhyl:commonrefreshlayout:1.8'
 ### QQ交流群:435173211
 
 #### 更新日志
+> 1.9 优化代码
+
 > 1.8 优化加载更多显示效果
 
 > 1.7 新增`setEnabled`禁用下拉刷新

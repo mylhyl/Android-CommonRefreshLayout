@@ -66,7 +66,6 @@ public class GridViewFragment extends Fragment implements SwipeRefreshLayout.OnR
         swipeRefreshGridView.setOnListLoadListener(this);
         swipeRefreshGridView.setOnRefreshListener(this);
 
-        //注意在 setOnListLoadListener 之后使用
         LoadConfig loadConfig = swipeRefreshGridView.getLoadConfig();
         loadConfig.setLoadText("加载更多数据...");
         loadConfig.setLoadTextSize(18);
