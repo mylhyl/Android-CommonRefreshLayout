@@ -1,4 +1,4 @@
-#### Android-PullRefreshLayout
+#### Android-CommonRefreshLayout
 基于`SwipeRefreshLayout`下拉刷新、上拉加载。支持的`AbsListView`、`RecycleView`、`WebView`
 
 ####特点
@@ -79,7 +79,7 @@
 
 #### 使用Gradle构建时添加一下依赖即可:
 ```javascript
-compile 'com.mylhyl:commonrefreshlayout:1.9'
+compile 'com.mylhyl:commonrefreshlayout:2.0'
 ```
 #### 如果使用eclipse
 只能`clone`源码，然后在 eclipse 中用`library`方式引用
@@ -89,6 +89,8 @@ compile 'com.mylhyl:commonrefreshlayout:1.9'
 ### QQ交流群:435173211
 
 #### 更新日志
+> 2.0 UI编辑支持预览
+
 > 1.9 优化代码
 
 > 1.8 优化加载更多显示效果

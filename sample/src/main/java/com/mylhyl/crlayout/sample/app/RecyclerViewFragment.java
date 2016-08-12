@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.mylhyl.crlayout.SwipeRefreshAdapterView;
 import com.mylhyl.crlayout.SwipeRefreshRecyclerView;
-import com.mylhyl.crlayout.internal.LoadConfig;
 import com.mylhyl.crlayout.sample.R;
 
 import java.util.ArrayList;
@@ -29,7 +28,7 @@ public class RecyclerViewFragment extends Fragment implements SwipeRefreshLayout
     private RecyclerViewAdapter adapter;
     private List<String> objects = new ArrayList<>();
     private int index;
-    private int footerIndex = 20;
+    private int footerIndex = 10;
 
     public RecyclerViewFragment() {
     }
@@ -42,7 +41,7 @@ public class RecyclerViewFragment extends Fragment implements SwipeRefreshLayout
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_recycler_view_xml, container, false);
+        return inflater.inflate(R.layout.fragment_recycler_view, container, false);
     }
 
     @Override
@@ -84,9 +83,9 @@ public class RecyclerViewFragment extends Fragment implements SwipeRefreshLayout
     @Override
     public void onListLoad() {
         ++index;
-        swipeRefreshRecyclerView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
+//        swipeRefreshRecyclerView.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
                 int count = footerIndex + 5;
                 for (int i = footerIndex; i < count; i++) {
                     objects.add("上拉 = " + i);
@@ -94,11 +93,11 @@ public class RecyclerViewFragment extends Fragment implements SwipeRefreshLayout
                 footerIndex = count;
                 adapter.notifyDataSetChanged();
                 swipeRefreshRecyclerView.setLoading(false);
-                if (index == 1) {
-                    swipeRefreshRecyclerView.setLoadCompleted(true);
-                }
-            }
-        }, 2000);
+//                if (index == 1) {
+//                    swipeRefreshRecyclerView.setLoadCompleted(true);
+//                }
+//            }
+//        }, 2000);
     }
 
     @Override
@@ -123,7 +122,7 @@ public class RecyclerViewFragment extends Fragment implements SwipeRefreshLayout
         @Override
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             MyViewHolder holder = new MyViewHolder(LayoutInflater.from(
-                    getContext()).inflate(android.R.layout.simple_list_item_1, parent,
+                    getContext()).inflate(R.layout.fragment_recycler_view_item, parent,
                     false));
             return holder;
         }

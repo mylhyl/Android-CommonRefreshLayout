@@ -34,8 +34,10 @@ public class SwipeRefreshWebView extends BaseSwipeRefresh<WebView> {
 
     public SwipeRefreshWebView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setOnRefreshListener(refreshListener);
-        getScrollView().setWebChromeClient(defaultWebChromeClient);
+        if (!isInEditMode()) {
+            setOnRefreshListener(refreshListener);
+            getScrollView().setWebChromeClient(defaultWebChromeClient);
+        }
     }
 
     @Override

@@ -74,7 +74,8 @@ public abstract class SwipeRefreshAdapterView<T extends View> extends BaseSwipeR
     }
 
     @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         if (isLoadAnimator && mLoadLayout != null && mLoadLayoutHeight == 0) {
             mLoadLayoutHeight = mLoadLayout.getMeasuredHeight();
             if (mLoadLayoutHeight > 0) {
@@ -83,7 +84,6 @@ public abstract class SwipeRefreshAdapterView<T extends View> extends BaseSwipeR
                 initHideLoadAnimator();
             }
         }
-        super.onLayout(changed, left, top, right, bottom);
     }
 
     private void initShowLoadAnimator() {
@@ -134,7 +134,8 @@ public abstract class SwipeRefreshAdapterView<T extends View> extends BaseSwipeR
             createLoadLayout();//创建上拉加载 View
             LayoutParams layoutParams = new LayoutParams(mLoadLayout.getLayoutParams());
             layoutParams.gravity = Gravity.BOTTOM;
-            addView(mLoadLayout, layoutParams);
+            //永远处于第二节点，防止 mLoadLayout 遮挡其它控件
+            addView(mLoadLayout, 1, layoutParams);
         }
     }
 
