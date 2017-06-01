@@ -1,16 +1,16 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven'
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
-        versionName version
+        versionName "2017.5.26"
     }
     buildTypes {
         release {
@@ -20,87 +20,19 @@ android {
     }
     lintOptions {
         abortOnError false
+        checkReleaseBuilds false
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:recyclerview-v7:23.4.0'
 }
 
-def siteUrl = 'https://github.com/mylhyl/Android-CommonRefreshLayout'
-def gitUrl = 'https://github.com/mylhyl/Android-CommonRefreshLayout.git'
-
-group = "com.mylhyl"
-version = "2.0"
-
-install {
-    repositories.mavenInstaller {
-        pom {
-            project {
-                packaging 'aar'
-                artifactId 'commonrefreshlayout'
-                name 'android pull refresh layout'
-                url siteUrl
-
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id 'mylhyl'
-                        name 'mylhylAndroid'
-                        email 'hupei132@qq.com'
-                    }
-                }
-                scm {
-                    connection gitUrl
-                    developerConnection gitUrl
-                    url siteUrl
-                }
-            }
-        }
-    }
-}
-
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
-}
-
-task javadoc(type: Javadoc) {
-    options.encoding = "UTF-8"
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives javadocJar
-    archives sourcesJar
-}
-
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
-bintray {
-    user = properties.getProperty("BINTRAY_USER")
-    key = properties.getProperty("BINTRAY_KEY")
-    configurations = ['archives']
-    pkg {
-        repo = "maven"
-        name = "commonrefreshlayout"
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        licenses = ["Apache-2.0"]
-        publish = true
-    }
+publish {
+    userOrg = 'mylhyl'
+    groupId = 'com.mylhyl'
+    artifactId = 'commonrefreshlayout'
+    version = '2.1'
+    description = 'android pull refresh layout'
+    website = "https://github.com/mylhyl/Android-CommonRefreshLayout"
 }

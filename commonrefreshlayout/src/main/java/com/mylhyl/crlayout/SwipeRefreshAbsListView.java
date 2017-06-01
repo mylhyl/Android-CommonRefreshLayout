@@ -14,7 +14,8 @@ import com.mylhyl.crlayout.internal.ILoadSwipeRefresh;
  * 子类必须实现 {@linkplain BaseSwipeRefresh#createScrollView(Context, AttributeSet)}  createScrollView}方法
  * <p> Created by hupei on 2016/5/12.
  */
-public abstract class SwipeRefreshAbsListView<T extends AbsListView> extends SwipeRefreshAdapterView<T> {
+public abstract class SwipeRefreshAbsListView<T extends AbsListView> extends
+        SwipeRefreshAdapterView<T> {
     private ListAdapter mEmptyDataSetAdapter;
     private EmptyDataSetObserver mDataSetObserver;
 
@@ -37,7 +38,8 @@ public abstract class SwipeRefreshAbsListView<T extends AbsListView> extends Swi
      */
     public final void setAdapter(ListAdapter adapter) {
         if (adapter == null)
-            throw new NullPointerException("mAdapter is null please call SwipeRefreshAbsListView.setAdapter");
+            throw new NullPointerException("mAdapter is null please call SwipeRefreshAbsListView" +
+                    ".setAdapter");
         getScrollView().setOnScrollListener(new OnScrollAbsListListener(this));
         getScrollView().setAdapter(adapter);
         registerDataSetObserver(adapter);
@@ -45,13 +47,17 @@ public abstract class SwipeRefreshAbsListView<T extends AbsListView> extends Swi
 
     final void registerDataSetObserver(ListAdapter adapter) {
         mEmptyDataSetAdapter = adapter;
-        if (mEmptyDataSetAdapter != null && mDataSetObserver != null) {
+
+        if (mEmptyDataSetAdapter == null) return;
+
+        if (mDataSetObserver != null)
             mEmptyDataSetAdapter.unregisterDataSetObserver(mDataSetObserver);
-        }
-        if (mEmptyDataSetAdapter != null && mDataSetObserver == null) {
+
+        if (mDataSetObserver == null)
             mDataSetObserver = new EmptyDataSetObserver();
-            mEmptyDataSetAdapter.registerDataSetObserver(mDataSetObserver);
-        }
+
+        mEmptyDataSetAdapter.registerDataSetObserver(mDataSetObserver);
+        mDataSetObserver.onChanged();
     }
 
     @Override
@@ -71,7 +77,8 @@ public abstract class SwipeRefreshAbsListView<T extends AbsListView> extends Swi
             mILoadSwipeRefresh = loadSwipeRefresh;
         }
 
-        public OnScrollAbsListListener(ILoadSwipeRefresh loadSwipeRefresh, AbsListView.OnScrollListener onScrollListener) {
+        public OnScrollAbsListListener(ILoadSwipeRefresh loadSwipeRefresh, AbsListView
+                .OnScrollListener onScrollListener) {
             mILoadSwipeRefresh = loadSwipeRefresh;
             mOnScrollListener = onScrollListener;
         }
@@ -91,9 +98,11 @@ public abstract class SwipeRefreshAbsListView<T extends AbsListView> extends Swi
         }
 
         @Override
-        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int
+                totalItemCount) {
             if (null != mOnScrollListener)
-                mOnScrollListener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
+                mOnScrollListener.onScroll(view, firstVisibleItem, visibleItemCount,
+                        totalItemCount);
         }
     }
 

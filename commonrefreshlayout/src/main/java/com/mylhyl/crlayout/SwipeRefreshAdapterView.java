@@ -19,10 +19,12 @@ import com.mylhyl.crlayout.internal.LoadLayout;
 import com.mylhyl.crlayout.internal.LoadLayoutBase;
 import com.mylhyl.crlayout.internal.LoadLayoutConvert;
 
-public abstract class SwipeRefreshAdapterView<T extends View> extends BaseSwipeRefresh<T> implements ILoadSwipeRefresh {
+public abstract class SwipeRefreshAdapterView<T extends View> extends BaseSwipeRefresh<T>
+        implements ILoadSwipeRefresh {
 
     private static final String DEFAULT_FOOTER_TEXT = "加载数据中...";
     private static final String DEFAULT_FOOTER_COMPLETED_TEXT = "没有更多了";
+    private static final int mLoadAnimatorDuration = 300;
 
     private boolean mLoading;// 是否处于上拉加载状态中
     private boolean mEnabledLoad;// 是否允许上拉加载
@@ -53,7 +55,8 @@ public abstract class SwipeRefreshAdapterView<T extends View> extends BaseSwipeR
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public SwipeRefreshAdapterView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public SwipeRefreshAdapterView(Context context, AttributeSet attrs, int defStyleAttr, int
+            defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context, attrs, defStyleAttr, defStyleRes);
     }
@@ -61,11 +64,13 @@ public abstract class SwipeRefreshAdapterView<T extends View> extends BaseSwipeR
     private void init(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         int[] crLayout = R.styleable.crLayout;
         if (crLayout != null && crLayout.length > 0) {
-            final TypedArray a = context.obtainStyledAttributes(attrs, crLayout, defStyleAttr, defStyleRes);
+            final TypedArray a = context.obtainStyledAttributes(attrs, crLayout, defStyleAttr,
+                    defStyleRes);
             if (a != null) {
                 mLoadResource = a.getResourceId(R.styleable.crLayout_load_layout, 0);
                 mLoadText = a.getString(R.styleable.crLayout_load_text);
-                mLoadIndeterminateDrawable = a.getDrawable(R.styleable.crLayout_load_indeterminate_drawable);
+                mLoadIndeterminateDrawable = a.getDrawable(R.styleable
+                        .crLayout_load_indeterminate_drawable);
                 mCompletedText = a.getString(R.styleable.crLayout_load_completed_text);
                 isLoadAnimator = a.getBoolean(R.styleable.crLayout_load_animator, false);
                 a.recycle();
@@ -105,7 +110,7 @@ public abstract class SwipeRefreshAdapterView<T extends View> extends BaseSwipeR
                 }
             }
         });
-        mShowLoadAnimator.setDuration(300);
+        mShowLoadAnimator.setDuration(mLoadAnimatorDuration);
     }
 
     private void initHideLoadAnimator() {
@@ -119,7 +124,7 @@ public abstract class SwipeRefreshAdapterView<T extends View> extends BaseSwipeR
                 getScrollView().setTranslationY(-lp.height);
             }
         });
-        mHideLoadAnimator.setDuration(300);
+        mHideLoadAnimator.setDuration(mLoadAnimatorDuration);
     }
 
     @Override
@@ -168,7 +173,8 @@ public abstract class SwipeRefreshAdapterView<T extends View> extends BaseSwipeR
     public final void setLoadLayoutResource(int resource) {
         mLoadResource = resource;
         if (mLoadLayout != null)
-            throw new RuntimeException("please call setLoadLayoutResource before setOnListLoadListener");
+            throw new RuntimeException("please call setLoadLayoutResource before " +
+                    "setOnListLoadListener");
     }
 
     /**

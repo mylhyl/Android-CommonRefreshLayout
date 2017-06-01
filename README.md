@@ -79,16 +79,20 @@
 
 #### 使用Gradle构建时添加一下依赖即可:
 ```javascript
-compile 'com.mylhyl:commonrefreshlayout:2.0'
+compile 'com.mylhyl:commonrefreshlayout:2.1'
 ```
 #### 如果使用eclipse
 只能`clone`源码，然后在 eclipse 中用`library`方式引用
      
 #### [下载APK体验](preview/sample-debug.apk)
 
-### QQ交流群:435173211
+### QQ交流群:579400704 [点击链接加入群Android-CommonRefreshLayout](https://jq.qq.com/?_wv=1027&k=49t3OYS)
+
+<img src="preview/qrcode.png"/>
 
 #### 更新日志
+> 2.1 修复空数据视图不显示
+
 > 2.0 UI编辑支持预览
 
 > 1.9 优化代码

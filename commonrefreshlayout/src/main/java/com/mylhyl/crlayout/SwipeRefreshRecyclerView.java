@@ -31,7 +31,8 @@ public class SwipeRefreshRecyclerView extends SwipeRefreshAdapterView<RecyclerVi
      */
     public final void setAdapter(RecyclerView.Adapter adapter) {
         if (adapter == null)
-            throw new NullPointerException("mAdapter is null please call CygSwipeRefreshLayout.setAdapter");
+            throw new NullPointerException("mAdapter is null please call CygSwipeRefreshLayout" +
+                    ".setAdapter");
         getScrollView().setOnScrollListener(new OnScrollRecyclerViewListener(this));
         getScrollView().setAdapter(adapter);
         registerAdapterDataObserver(adapter);
@@ -50,13 +51,15 @@ public class SwipeRefreshRecyclerView extends SwipeRefreshAdapterView<RecyclerVi
 
     private void registerAdapterDataObserver(RecyclerView.Adapter adapter) {
         mEmptyDataSetAdapter = adapter;
-        if (mEmptyDataSetAdapter != null && mDataSetObserver != null) {
+        if (mEmptyDataSetAdapter == null) return;
+        if (mDataSetObserver != null)
             mEmptyDataSetAdapter.unregisterAdapterDataObserver(mDataSetObserver);
-        }
-        if (mEmptyDataSetAdapter != null && mDataSetObserver == null) {
+
+        if (mDataSetObserver == null)
             mDataSetObserver = new EmptyDataSetObserver();
-            mEmptyDataSetAdapter.registerAdapterDataObserver(mDataSetObserver);
-        }
+
+        mEmptyDataSetAdapter.registerAdapterDataObserver(mDataSetObserver);
+        mDataSetObserver.onChanged();
     }
 
     @Override
@@ -76,7 +79,8 @@ public class SwipeRefreshRecyclerView extends SwipeRefreshAdapterView<RecyclerVi
             mILoadSwipeRefresh = loadSwipeRefresh;
         }
 
-        public OnScrollRecyclerViewListener(ILoadSwipeRefresh loadSwipeRefresh, RecyclerView.OnScrollListener onScrollListener) {
+        public OnScrollRecyclerViewListener(ILoadSwipeRefresh loadSwipeRefresh, RecyclerView
+                .OnScrollListener onScrollListener) {
             mILoadSwipeRefresh = loadSwipeRefresh;
             mOnScrollListener = onScrollListener;
         }
@@ -163,14 +167,16 @@ public class SwipeRefreshRecyclerView extends SwipeRefreshAdapterView<RecyclerVi
          */
         private int getLastVisiblePosition(RecyclerView recyclerView) {
             View lastVisibleChild = recyclerView.getChildAt(recyclerView.getChildCount() - 1);
-            return lastVisibleChild != null ? recyclerView.getChildAdapterPosition(lastVisibleChild) : -1;
+            return lastVisibleChild != null ? recyclerView.getChildAdapterPosition
+                    (lastVisibleChild) : -1;
         }
     }
 
     private class EmptyDataSetObserver extends RecyclerView.AdapterDataObserver {
         @Override
         public void onChanged() {
-            updateEmptyViewShown(mEmptyDataSetAdapter == null || mEmptyDataSetAdapter.getItemCount() == 0);
+            updateEmptyViewShown(mEmptyDataSetAdapter == null || mEmptyDataSetAdapter
+                    .getItemCount() == 0);
         }
 
         @Override
