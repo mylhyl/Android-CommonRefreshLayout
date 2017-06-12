@@ -46,18 +46,15 @@ public abstract class SwipeRefreshAbsListView<T extends AbsListView> extends
     }
 
     final void registerDataSetObserver(ListAdapter adapter) {
-        mEmptyDataSetAdapter = adapter;
-
-        if (mEmptyDataSetAdapter == null) return;
-
-        if (mDataSetObserver != null)
+        if (mEmptyDataSetAdapter != null && mDataSetObserver != null)
             mEmptyDataSetAdapter.unregisterDataSetObserver(mDataSetObserver);
 
-        if (mDataSetObserver == null)
+        mEmptyDataSetAdapter = adapter;
+        if (mEmptyDataSetAdapter != null) {
             mDataSetObserver = new EmptyDataSetObserver();
-
-        mEmptyDataSetAdapter.registerDataSetObserver(mDataSetObserver);
-        mDataSetObserver.onChanged();
+            mEmptyDataSetAdapter.registerDataSetObserver(mDataSetObserver);
+            mDataSetObserver.onChanged();
+        }
     }
 
     @Override

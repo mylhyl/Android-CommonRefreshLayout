@@ -3,5 +3,9 @@
     <item
         android:id="@+id/menu"
         android:showAsAction="always"
-        android:title="清空" />
+        android:title="清空"/>
+    <item
+        android:id="@+id/menu_reset"
+        android:showAsAction="always"
+        android:title="重置"/>
 </menu>

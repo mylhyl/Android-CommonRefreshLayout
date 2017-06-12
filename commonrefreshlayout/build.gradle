@@ -32,7 +32,7 @@ publish {
     userOrg = 'mylhyl'
     groupId = 'com.mylhyl'
     artifactId = 'commonrefreshlayout'
-    version = '2.1'
+    version = '2.4'
     description = 'android pull refresh layout'
     website = "https://github.com/mylhyl/Android-CommonRefreshLayout"
 }

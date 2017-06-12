@@ -42,14 +42,14 @@ public class SwipeRefreshWebView extends BaseSwipeRefresh<WebView> {
 
     @Override
     public final void autoRefresh() {
-        mLoadSwipeRefresh.autoRefresh();
+        mLoadSwipeRefresh.showProgressView();
         mLoadSwipeRefresh.setRefreshing(true);
     }
 
     @Override
     public final void autoRefresh(@ColorRes int... colorResIds) {
         //重写主要是为了显示动画时，不响应 onRefresh() 方法
-        mLoadSwipeRefresh.autoRefresh(colorResIds);
+        mLoadSwipeRefresh.showProgressView(colorResIds);
         mLoadSwipeRefresh.setRefreshing(true);
     }
 

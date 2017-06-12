@@ -50,16 +50,15 @@ public class SwipeRefreshRecyclerView extends SwipeRefreshAdapterView<RecyclerVi
     }
 
     private void registerAdapterDataObserver(RecyclerView.Adapter adapter) {
-        mEmptyDataSetAdapter = adapter;
-        if (mEmptyDataSetAdapter == null) return;
-        if (mDataSetObserver != null)
+        if (mEmptyDataSetAdapter != null && mDataSetObserver != null)
             mEmptyDataSetAdapter.unregisterAdapterDataObserver(mDataSetObserver);
 
-        if (mDataSetObserver == null)
+        mEmptyDataSetAdapter = adapter;
+        if (mEmptyDataSetAdapter != null){
             mDataSetObserver = new EmptyDataSetObserver();
-
-        mEmptyDataSetAdapter.registerAdapterDataObserver(mDataSetObserver);
-        mDataSetObserver.onChanged();
+            mEmptyDataSetAdapter.registerAdapterDataObserver(mDataSetObserver);
+            mDataSetObserver.onChanged();
+        }
     }
 
     @Override

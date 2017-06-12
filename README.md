@@ -79,7 +79,7 @@
 
 #### 使用Gradle构建时添加一下依赖即可:
 ```javascript
-compile 'com.mylhyl:commonrefreshlayout:2.1'
+compile 'com.mylhyl:commonrefreshlayout:2.4'
 ```
 #### 如果使用eclipse
 只能`clone`源码，然后在 eclipse 中用`library`方式引用
@@ -91,6 +91,8 @@ compile 'com.mylhyl:commonrefreshlayout:2.1'
 <img src="preview/qrcode.png"/>
 
 #### 更新日志
+> 2.4 修复第二次setAdapter崩溃的问题，修改已知BUG
+
 > 2.1 修复空数据视图不显示
 
 > 2.0 UI编辑支持预览

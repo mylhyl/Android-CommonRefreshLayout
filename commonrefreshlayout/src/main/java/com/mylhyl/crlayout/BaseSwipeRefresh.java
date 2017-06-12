@@ -111,19 +111,19 @@ public abstract class BaseSwipeRefresh<T extends View> extends FrameLayout imple
 
     @Override
     public void autoRefresh() {
-        mLoadSwipeRefresh.autoRefresh();
+        mLoadSwipeRefresh.showProgressView();
         this.setRefreshing(true);
     }
 
     @Override
     public void autoRefresh(@ColorRes int... colorResIds) {
-        mLoadSwipeRefresh.autoRefresh(colorResIds);
+        mLoadSwipeRefresh.showProgressView(colorResIds);
         this.setRefreshing(true);
     }
 
     @Override
     public final void autoRefresh(boolean scale, int start, int end, @ColorRes int... colorResIds) {
-        mLoadSwipeRefresh.autoRefresh(scale, start, end, colorResIds);
+        mLoadSwipeRefresh.showProgressView(scale, start, end, colorResIds);
         this.setRefreshing(true);
     }
 
@@ -143,6 +143,9 @@ public abstract class BaseSwipeRefresh<T extends View> extends FrameLayout imple
     @Override
     public final void setEmptyView(View newEmptyView) {
         if (null != newEmptyView) {
+            if (mEmptyView != null && mRefreshLayoutWrapper != null) {
+                mRefreshLayoutWrapper.removeView(mEmptyView);
+            }
             newEmptyView.setVisibility(GONE);
             mEmptyView = newEmptyView;
             newEmptyView.setClickable(true);

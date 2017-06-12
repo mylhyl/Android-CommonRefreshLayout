@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.AbsListView;
 
-final class MultiSwipeRefreshLayout extends SwipeRefreshLayout {
+public final class MultiSwipeRefreshLayout extends SwipeRefreshLayout {
     // Default offset in dips from the top of the view to where the progress spinner should stop
     private static final int DEFAULT_CIRCLE_TARGET = 64;
     private float mSpinnerFinalOffset;
@@ -35,17 +35,17 @@ final class MultiSwipeRefreshLayout extends SwipeRefreshLayout {
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
     }
 
-    public final void autoRefresh() {
+    public final void showProgressView() {
         if (mColorResIds == null)
             mColorResIds = DEFAULT_COLOR_RES;
-        autoRefresh(mColorResIds);
+        showProgressView(mColorResIds);
     }
 
-    public final void autoRefresh(@ColorRes int... colorResIds) {
-        autoRefresh(false, 0, (int) mSpinnerFinalOffset, colorResIds);
+    public final void showProgressView(@ColorRes int... colorResIds) {
+        showProgressView(false, 0, (int) mSpinnerFinalOffset, colorResIds);
     }
 
-    public final void autoRefresh(boolean scale, int start, int end, @ColorRes int... colorResIds) {
+    public final void showProgressView(boolean scale, int start, int end, @ColorRes int... colorResIds) {
         this.mColorResIds = colorResIds;
         setColorSchemeResources(colorResIds);
         // 显示下拉动画，关键在于源码中的 mUsingCustomStart = true

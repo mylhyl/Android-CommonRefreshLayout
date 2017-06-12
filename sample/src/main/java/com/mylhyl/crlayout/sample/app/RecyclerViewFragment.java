@@ -54,7 +54,8 @@ public class RecyclerViewFragment extends Fragment implements SwipeRefreshLayout
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
-        swipeRefreshRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        swipeRefreshRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),
+                LinearLayoutManager.VERTICAL, false));
         swipeRefreshRecyclerView.setOnListLoadListener(this);
         swipeRefreshRecyclerView.setOnRefreshListener(this);
 
@@ -86,13 +87,13 @@ public class RecyclerViewFragment extends Fragment implements SwipeRefreshLayout
 //        swipeRefreshRecyclerView.postDelayed(new Runnable() {
 //            @Override
 //            public void run() {
-                int count = footerIndex + 5;
-                for (int i = footerIndex; i < count; i++) {
-                    objects.add("上拉 = " + i);
-                }
-                footerIndex = count;
-                adapter.notifyDataSetChanged();
-                swipeRefreshRecyclerView.setLoading(false);
+        int count = footerIndex + 5;
+        for (int i = footerIndex; i < count; i++) {
+            objects.add("上拉 = " + i);
+        }
+        footerIndex = count;
+        adapter.notifyDataSetChanged();
+        swipeRefreshRecyclerView.setLoading(false);
 //                if (index == 1) {
 //                    swipeRefreshRecyclerView.setLoadCompleted(true);
 //                }
@@ -107,8 +108,17 @@ public class RecyclerViewFragment extends Fragment implements SwipeRefreshLayout
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        objects.clear();
-        adapter.notifyDataSetChanged();
+        if (item.getItemId() == R.id.menu) {
+            objects.clear();
+            adapter.notifyDataSetChanged();
+        } else if (item.getItemId() == R.id.menu_reset) {
+            objects.clear();
+            for (int i = 0; i < 5; i++) {
+                objects.add("重置数据 = " + i);
+            }
+            adapter = new RecyclerViewAdapter();
+            swipeRefreshRecyclerView.setAdapter(adapter);
+        }
         return super.onOptionsItemSelected(item);
     }
 
