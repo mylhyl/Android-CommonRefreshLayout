@@ -85,7 +85,7 @@ public class AppListFragment extends SwipeRefreshListFragment {
     @Override
     public void onRefresh() {
         index = 0;
-        adapter.clear(false);
+        adapter.clear(true);
         executeAsync(URL);
         getSwipeRefreshLayout().postDelayed(new Runnable() {
             @Override
