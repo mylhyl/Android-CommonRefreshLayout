@@ -86,10 +86,6 @@ compile 'com.mylhyl:commonrefreshlayout:2.4'
      
 #### [下载APK体验](preview/sample-debug.apk)
 
-### QQ交流群:579400704 [点击链接加入群Android-CommonRefreshLayout](https://jq.qq.com/?_wv=1027&k=49t3OYS)
-
-<img src="preview/qrcode.png"/>
-
 #### 更新日志
 > 2.4 修复第二次setAdapter崩溃的问题，修改已知BUG
 
